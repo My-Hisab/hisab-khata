@@ -1,0 +1,2238 @@
+<!DOCTYPE html>
+<html lang="bn"><head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>হিসাব খাতা</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Bengali:wght@500;700&amp;family=Hind+Siliguri:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://accounts.google.com/gsi/client" async defer></script>
+<style>
+  :root{
+    --paper:#EFEDE6;
+    --surface:#FFFFFF;
+    --border:#DCD8CC;
+    --rule:#DDD8C8;
+    --ink:#1D2B27;
+    --ink-soft:#5B675F;
+    --brand:#1F4B3F;
+    --brand-soft:#2E6350;
+    --good:#2E7D5B;
+    --bad:#A6493B;
+    --gold:#B98F3E;
+    --acc-rahim:#2E5A8C;
+    --acc-sohag:#8C3E5A;
+    --acc-draft:#B98F3E;
+    --acc-final:#1F4B3F;
+    --cat-invest:#6B46C1;
+    --cat-bkash:#D6136E;
+    --cat-bank:#1D6FA5;
+    --cat-cash:#2E7D5B;
+    --cat-dhar:#B85C1E;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:var(--paper);
+    color:var(--ink);
+    font-family:'Hind Siliguri', sans-serif;
+    padding:20px 14px 60px;
+  }
+  h1,h2,h3{font-family:'Noto Serif Bengali', serif; margin:0;}
+  .app-title{
+    text-align:center;
+    font-size:26px;
+    font-weight:700;
+    color:var(--brand);
+    margin-bottom:4px;
+  }
+  .app-sub{
+    text-align:center;
+    color:var(--ink-soft);
+    font-size:13px;
+    margin-bottom:22px;
+  }
+  .grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:18px;
+    max-width:960px;
+    margin:0 auto;
+    align-items:start;
+  }
+  @media (max-width:760px){
+    .grid{grid-template-columns:1fr;}
+  }
+
+  /* তিনটি হিসাবকে আলাদা রঙে চিহ্নিত করা */
+  #card-rahim{ border-top:4px solid var(--acc-rahim); max-width:480px; margin:0 auto; }
+  #card-rahim .ledger-head{ border-bottom-color:var(--acc-rahim); }
+  #card-rahim .ledger-head h2{ color:var(--acc-rahim); }
+  #card-rahim .result-row{ border-top-color:var(--acc-rahim); }
+  #card-rahim .result-row .rlabel{ color:var(--acc-rahim); }
+
+  #card-second{ border-top:4px solid var(--acc-draft); }
+  #card-second .ledger-head{ border-bottom-color:var(--acc-draft); }
+  #card-second .ledger-head h2{ color:var(--acc-draft); }
+  #card-second .result-row{ border-top-color:var(--acc-draft); }
+  #card-second .result-row .rlabel{ color:var(--acc-draft); }
+
+  #card-sohag{ border-top:4px solid var(--acc-sohag); max-width:480px; margin:0 auto; }
+  #card-sohag .ledger-head{ border-bottom-color:var(--acc-sohag); }
+  #card-sohag .ledger-head h2{ color:var(--acc-sohag); }
+  #card-sohag .result-row{ border-top-color:var(--acc-sohag); }
+  #card-sohag .result-row .rlabel{ color:var(--acc-sohag); }
+
+  .final-calculation-card{ border-top:4px solid var(--acc-final); }
+  .ledger{
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:6px;
+    padding:18px 18px 16px;
+    box-shadow:0 1px 0 rgba(0,0,0,0.03);
+  }
+  .ledger-head{
+    display:flex;
+    align-items:baseline;
+    justify-content:space-between;
+    border-bottom:2px solid var(--brand);
+    padding-bottom:8px;
+    margin-bottom:6px;
+  }
+  .ledger-head h2{font-size:19px; color:var(--brand);}
+  .ledger-head span{font-size:13.5px; color:var(--ink); font-weight:500;}
+  .row{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:10px;
+    padding:9px 0;
+    border-bottom:1px dashed var(--rule);
+  }
+  .row:last-of-type{border-bottom:none;}
+  .row label{
+    font-size:14.5px;
+    flex:1;
+    color:var(--ink);
+  }
+  .row .sign{
+    font-size:13px;
+    color:var(--ink-soft);
+    width:14px;
+    text-align:center;
+  }
+  .row .dhar-label-input{
+    font-size:14.5px;
+    flex:1;
+    color:var(--ink);
+    font-family:'Hind Siliguri', sans-serif;
+    background:transparent;
+    border:none;
+    border-bottom:1px dashed var(--rule);
+    padding:2px 2px;
+    min-width:0;
+  }
+  .row .dhar-label-input:focus{
+    outline:none;
+    border-bottom:1px dashed var(--brand-soft);
+    background:#FBFAF7;
+  }
+  .row input[type=number]{
+    width:9ch;
+    min-width:9ch;
+    text-align:right;
+    font-size:17px;
+    font-weight:700;
+    font-family:'Hind Siliguri', sans-serif;
+    font-variant-numeric:tabular-nums;
+    padding:6px 8px;
+    border:1px solid var(--border);
+    border-radius:4px;
+    background:#FBFAF7;
+    color:var(--ink);
+  }
+  .row input[type=number]:focus{
+    outline:none;
+    border-color:var(--brand-soft);
+    background:#fff;
+  }
+  .result-row{
+    margin-top:10px;
+    padding-top:12px;
+    border-top:2px solid var(--brand);
+    display:flex;
+    justify-content:space-between;
+    align-items:baseline;
+  }
+  .result-row .rlabel{
+    font-family:'Noto Serif Bengali', serif;
+    font-weight:700;
+    font-size:15.5px;
+    color:var(--brand);
+  }
+  .result-row .rvalue{
+    font-size:20px;
+    font-weight:700;
+    font-variant-numeric:tabular-nums;
+    color:var(--ink);
+  }
+  .category-total{font-weight:700;border-top:1px solid var(--rule);margin-top:3px;padding-top:8px;}\n   .category-total strong{font-variant-numeric:tabular-nums;color:var(--brand);}\n 
+  .category-total{
+    border-top:1px solid var(--rule);
+    border-bottom:1px solid var(--rule);
+    margin:2px 0 8px;
+    padding:7px 8px;
+    background:#FBFAF7;
+    font-weight:600;
+  }
+  .category-total strong{font-variant-numeric:tabular-nums;color:var(--brand);}
+  .subtotal-row{
+    display:flex;
+    justify-content:space-between;
+    padding:6px 0;
+    font-size:14px;
+    color:var(--ink-soft);
+  }
+  .btn-row{
+    display:flex;
+    gap:8px;
+    margin-top:14px;
+    flex-wrap:wrap;
+  }
+  button{
+    font-family:'Hind Siliguri', sans-serif;
+    font-size:14px;
+    font-weight:600;
+    padding:9px 14px;
+    border-radius:5px;
+    border:1px solid var(--border);
+    background:#F4F2EC;
+    color:var(--ink);
+    cursor:pointer;
+  }
+  button.primary{
+    background:var(--brand);
+    border-color:var(--brand);
+    color:#fff;
+  }
+  button.ghost{
+    background:transparent;
+  }
+  button:active{transform:translateY(1px);}
+  .group-label{
+    font-size:12px;
+    color:var(--gold);
+    font-weight:600;
+    margin:12px 0 2px;
+    letter-spacing:.2px;
+    padding-left:8px;
+    border-left:3px solid currentColor;
+  }
+  .group-label:first-of-type{margin-top:2px;}
+  .group-label.gl-invest{color:var(--cat-invest);}
+  .group-label.gl-bkash{color:var(--cat-bkash);}
+  .group-label.gl-bank{color:var(--cat-bank);}
+  .group-label.gl-cash{color:var(--cat-cash);}
+  .group-label.gl-dhar{color:var(--cat-dhar);}
+  .category-total.ct-invest strong{color:var(--cat-invest);}
+  .category-total.ct-bkash strong{color:var(--cat-bkash);}
+  .category-total.ct-bank strong{color:var(--cat-bank);}
+  .category-total.ct-cash strong{color:var(--cat-cash);}
+  .category-total.ct-dhar strong{color:var(--cat-dhar);}
+  .final-card{
+    max-width:960px;
+    margin:20px auto 0;
+    background:var(--brand);
+    border-radius:6px;
+    padding:20px 22px;
+    color:#fff;
+    text-align:center;
+  }
+  .final-card h3{
+    font-size:14px;
+    font-weight:500;
+    opacity:.85;
+    margin-bottom:6px;
+  }
+  .final-amount{
+    font-size:32px;
+    font-weight:700;
+    font-variant-numeric:tabular-nums;
+  }
+  .summary-breakdown{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:8px;
+    max-width:620px;
+    margin:0 auto 14px;
+    text-align:left;
+  }
+  .summary-item{
+    background:rgba(255,255,255,.10);
+    border:1px solid rgba(255,255,255,.15);
+    border-radius:5px;
+    padding:8px 10px;
+    display:flex;
+    justify-content:space-between;
+    gap:10px;
+    font-size:13px;
+  }
+  .summary-item strong{font-variant-numeric:tabular-nums;}
+  @media(max-width:500px){
+    .summary-breakdown{grid-template-columns:1fr;}
+  }
+
+  .final-tag{
+    display:inline-block;
+    margin-top:6px;
+    font-size:13px;
+    padding:3px 12px;
+    border-radius:20px;
+    font-weight:600;
+  }
+  .tag-good{background:rgba(46,125,91,0.9);}
+  .tag-bad{background:rgba(166,73,59,0.9);}
+  .tag-neutral{background:rgba(255,255,255,0.2);}
+  .note{
+    max-width:960px;
+    margin:14px auto 0;
+    font-size:12px;
+    color:var(--ink-soft);
+    text-align:center;
+    line-height:1.6;
+  }
+  .toast{
+    position:fixed;
+    bottom:18px;
+    left:50%;
+    transform:translateX(-50%);
+    background:var(--ink);
+    color:#fff;
+    padding:9px 16px;
+    border-radius:20px;
+    font-size:13px;
+    opacity:0;
+    transition:opacity .25s;
+    pointer-events:none;
+  }
+  .toast.show{opacity:1;}
+
+  .backup-bar{
+    display:flex;
+    justify-content:center;
+    gap:8px;
+    flex-wrap:wrap;
+    max-width:960px;
+    margin:0 auto 16px;
+  }
+  .backup-bar button,
+  .backup-bar .backup-restore-label{
+    font-family:'Hind Siliguri', sans-serif;
+    font-size:13px;
+    font-weight:600;
+    padding:8px 14px;
+    border-radius:5px;
+    border:1px solid var(--border);
+    background:#F4F2EC;
+    color:var(--ink);
+    cursor:pointer;
+    display:inline-flex;
+    align-items:center;
+    gap:4px;
+  }
+  .backup-bar .backup-restore-label input[type=file]{
+    display:none;
+  }
+  .backup-bar .save-all-btn{
+    background:var(--brand);
+    border-color:var(--brand);
+    color:#fff;
+  }
+
+  .tabs{
+    display:flex;
+    justify-content:center;
+    gap:8px;
+    flex-wrap:wrap;
+    max-width:960px;
+    margin:0 auto 18px;
+  }
+  .tab-btn{
+    flex:1;
+    max-width:220px;
+    padding:10px 14px;
+    border-radius:6px;
+    border:1px solid var(--border);
+    background:#F4F2EC;
+    color:var(--ink-soft);
+    font-family:'Hind Siliguri', sans-serif;
+    font-size:14px;
+    font-weight:600;
+    cursor:pointer;
+  }
+  .tab-btn.active{
+    background:var(--brand);
+    border-color:var(--brand);
+    color:#fff;
+  }
+
+  /* ৩টা ট্যাবের ৩টা আলাদা রঙ */
+  #tab-btn-main{ border-bottom:3px solid var(--brand); }
+  #tab-btn-draft{ border-bottom:3px solid var(--acc-draft); }
+  #tab-btn-final{ border-bottom:3px solid var(--acc-rahim); }
+
+  #tab-btn-main.active{ background:var(--brand); border-color:var(--brand); }
+  #tab-btn-draft.active{ background:var(--acc-draft); border-color:var(--acc-draft); }
+  #tab-btn-final.active{ background:var(--acc-rahim); border-color:var(--acc-rahim); }
+
+  .tab-panel{display:none;}
+  .tab-panel.active{display:block;}
+
+  .draft-wrap{max-width:960px; margin:0 auto;}
+  .draft-toolbar{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:10px;
+    flex-wrap:wrap;
+    margin-bottom:16px;
+  }
+  .draft-toolbar .app-sub{margin:0; text-align:left;}
+  .person-card{margin-bottom:18px; padding-left:10px; padding-right:10px;}
+  .person-head{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    border-bottom:2px solid var(--brand);
+    padding-bottom:8px;
+    margin-bottom:10px;
+  }
+  .person-name-input{
+    font-family:'Noto Serif Bengali', serif;
+    font-size:18px;
+    font-weight:700;
+    color:var(--brand);
+    border:none;
+    background:transparent;
+    flex:1;
+    padding:2px 4px;
+    border-radius:4px;
+    min-width:0;
+  }
+  .person-name-input:focus{
+    outline:none;
+    background:#FBFAF7;
+    border:1px solid var(--border);
+  }
+  .person-remove{
+    background:transparent;
+    border:none;
+    color:var(--bad);
+    font-size:18px;
+    cursor:pointer;
+    padding:2px 6px;
+    flex-shrink:0;
+  }
+  .cat-block{margin-bottom:12px;}
+  .cat-title{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    font-size:12px;
+    color:var(--gold);
+    font-weight:600;
+    margin:12px 0 2px;
+    letter-spacing:.2px;
+  }
+  .cat-block:first-of-type .cat-title{margin-top:2px;}
+  .cat-subtotal{
+    font-size:13px;
+    color:var(--ink-soft);
+    font-weight:600;
+    font-variant-numeric:tabular-nums;
+  }
+  .entry-row{
+    display:flex;
+    align-items:center;
+    gap:1px;
+    padding:0;
+    min-width:0;
+  }
+  .entry-row input[type=number]{
+    flex:1 1 auto;
+    min-width:0;
+    width:100%;
+    text-align:right;
+    font-size:14.5px;
+    font-weight:700;
+    font-family:'Hind Siliguri', sans-serif;
+    font-variant-numeric:tabular-nums;
+    padding:6px 3px;
+    border:1px solid var(--border);
+    border-radius:4px;
+    background:#FBFAF7;
+    color:var(--ink);
+  }
+  .entry-row input[type=number]:focus{
+    outline:none;
+    border-color:var(--brand-soft);
+    background:#fff;
+  }
+  .entry-remove{
+    background:transparent;
+    border:none;
+    color:var(--ink-soft);
+    font-size:13px;
+    cursor:pointer;
+    padding:2px 0;
+    line-height:1;
+    flex-shrink:0;
+  }
+  .cat-entry-area{display:block;}
+  .cat-entry-area .rows-wrap{width:100%; display:grid; grid-template-columns:repeat(4, 1fr); gap:6px 5px; align-items:center;}
+  .cat-entry-actions{display:flex;flex-direction:row;flex-wrap:wrap;gap:6px;margin-top:8px;}
+  .cat-entry-actions .add-row-btn,
+  .cat-entry-actions .cat-submit-btn,
+  .cat-entry-actions .cat-clear-btn{white-space:nowrap;flex:0 0 auto;}
+  .person-action-row{display:flex;justify-content:flex-end;gap:8px;margin-top:14px;padding-top:10px;border-top:1px solid var(--rule);flex-wrap:wrap;}
+  .add-row-btn{
+    background:transparent;
+    border:1px dashed var(--border);
+    color:var(--brand-soft);
+    font-family:'Hind Siliguri', sans-serif;
+    font-size:12.5px;
+    font-weight:600;
+    padding:5px 10px;
+    border-radius:4px;
+    cursor:pointer;
+  }
+  .person-total-row{
+    margin-top:10px;
+    padding-top:12px;
+    border-top:2px solid var(--brand);
+    display:flex;
+    justify-content:space-between;
+    align-items:baseline;
+    gap:10px;
+  }
+  .person-total-row .rlabel{
+    font-family:'Noto Serif Bengali', serif;
+    font-weight:700;
+    font-size:15px;
+    color:var(--brand);
+  }
+  .person-total-row .rvalue{
+    font-size:19px;
+    font-weight:700;
+    font-variant-numeric:tabular-nums;
+    color:var(--ink);
+  }
+  .add-person-btn{
+    display:block;
+    width:100%;
+    padding:12px;
+    border:1px dashed var(--brand-soft);
+    background:transparent;
+    color:var(--brand-soft);
+    font-family:'Hind Siliguri', sans-serif;
+    font-weight:600;
+    font-size:14px;
+    border-radius:6px;
+    cursor:pointer;
+    margin-bottom:20px;
+  }
+
+
+  .final-calculation-card{ text-align:left; }
+  .final-calculation-card h3{text-align:center;margin-bottom:12px;}
+  .calc-lines{max-width:620px;margin:0 auto;}
+  .calc-line{display:flex;justify-content:space-between;align-items:baseline;gap:14px;padding:9px 4px;border-bottom:1px solid rgba(255,255,255,.18);font-size:14px;}
+  .calc-line strong{font-variant-numeric:tabular-nums;white-space:nowrap;}
+  .calc-line-total{border-top:2px solid rgba(255,255,255,.5);border-bottom:2px solid rgba(255,255,255,.28);font-weight:700;font-size:15px;margin-top:2px;}
+  .calc-line-result{margin-top:10px;padding:12px 4px;border:2px solid rgba(255,255,255,.55);border-radius:5px;font-size:17px;font-weight:700;}
+  .calc-line-result strong{font-size:22px;}
+.final-total-label{font-size:13px;color:#64748b;margin-top:16px;margin-bottom:2px;text-align:center;font-weight:700}
+.summary-item small{display:block;font-size:11px;color:#94a3b8;margin-bottom:2px}
+
+/* ---------- ব্যাকআপ ও রিকভারি প্যানেল ---------- */
+.hk-status{max-width:960px;margin:-6px auto 14px;text-align:center;font-size:12px;color:var(--ink-soft);line-height:1.7}
+.hk-warn{color:var(--bad)}
+.hk-modal{display:none;position:fixed;inset:0;background:rgba(20,30,26,.55);z-index:50;align-items:flex-start;justify-content:center;padding:16px 10px;overflow-y:auto}
+.hk-modal.open{display:flex}
+.hk-box{background:var(--surface);border-radius:8px;max-width:560px;width:100%;padding:16px;border-top:4px solid var(--brand)}
+.hk-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+.hk-head h2{font-size:19px;color:var(--brand)}
+.hk-step{border:1px solid var(--border);border-radius:6px;padding:10px 12px;margin-bottom:12px;background:#FBFAF7}
+.hk-step-title{font-family:'Noto Serif Bengali',serif;font-weight:700;color:var(--brand);font-size:15px;margin-bottom:8px}
+.hk-step-title small{font-family:'Hind Siliguri',sans-serif;font-weight:400;color:var(--ink-soft);font-size:12px;margin-left:6px}
+.hk-num{display:inline-flex;width:22px;height:22px;border-radius:50%;background:var(--brand);color:#fff;align-items:center;justify-content:center;font-size:13px;margin-right:8px}
+.hk-actions{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px}
+.hk-btn{font-family:'Hind Siliguri',sans-serif;font-size:13px;font-weight:600;padding:7px 12px;border-radius:5px;border:1px solid var(--border);background:#F4F2EC;color:var(--ink);cursor:pointer;display:inline-flex;align-items:center;gap:4px}
+.hk-btn input[type=file]{display:none}
+.hk-list{max-height:220px;overflow-y:auto}
+.hk-item{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:7px 0;border-bottom:1px dashed var(--rule);font-size:13.5px}
+.hk-item small{display:block;color:var(--ink-soft);font-size:12px}
+.hk-tag{font-size:11px;background:#EFEDE6;border-radius:10px;padding:1px 8px;color:var(--ink-soft)}
+.hk-empty,.hk-tip{font-size:12.5px;color:var(--ink-soft);line-height:1.6}
+</style>
+</head>
+<body>
+<script id="seed-data">var __ls=(function(){try{var t='__t';localStorage.setItem(t,'1');localStorage.removeItem(t);return localStorage}catch(e){var m={};return{getItem:function(k){return Object.prototype.hasOwnProperty.call(m,k)?m[k]:null},setItem:function(k,v){m[k]=String(v)},removeItem:function(k){delete m[k]}}}})();try{var SEED_AT="2026-10-18T17:52:46.325Z";var S={};var cur=__ls.getItem('seed_at')||'';if(SEED_AT>cur){for(var k in S){if(S[k]!==null&&S[k]!==undefined)__ls.setItem(k,S[k]);}__ls.setItem('seed_at',SEED_AT);}}catch(e){}</script>
+
+
+<div class="app-title">হিসাব খাতা</div>
+<div class="app-sub">দৈনিক লেনদেনের হিসাব</div>
+
+<div class="backup-bar">
+  <button type="button" onclick="downloadBackup()">⬇ ব্যাকআপ ডাউনলোড</button>
+  <label class="backup-restore-label">⬆ ব্যাকআপ পুনরুদ্ধার
+    <input type="file" accept="application/json" onchange="restoreBackup(event)">
+  </label>
+  <button type="button" class="save-all-btn" onclick="saveAllData()">💾 সেভ</button>
+  <button type="button" class="save-all-btn" onclick="saveWithData()">⬇ ডেটাসহ ফাইল ডাউনলোড</button>
+  <button type="button" onclick="hkOpen()">🛟 ব্যাকআপ ও রিকভারি</button>
+  <button type="button" class="save-all-btn" id="gd-btn" onclick="gdConnectClick()">☁ Google Drive সিঙ্ক</button>
+  <button type="button" id="gd-off" style="display:none" onclick="gdDisconnect()">Drive বিচ্ছিন্ন</button>
+</div>
+<div class="hk-status" id="hk-status"></div>
+<div class="hk-status" id="gd-status"></div>
+
+<div class="tabs">
+  <button class="tab-btn active" id="tab-btn-main" onclick="switchTab('main')">রহিম হিসাব</button>
+  <button class="tab-btn" id="tab-btn-sohag" onclick="switchTab('sohag')">সোহাগ হিসাব</button>
+  <button class="tab-btn" id="tab-btn-draft" onclick="switchTab('draft')">বিবরণী হিসাব</button>
+  <button class="tab-btn" id="tab-btn-second" onclick="switchTab('second')">ব্যালেন্স হিসাব</button>
+  <button class="tab-btn" id="tab-btn-final" onclick="switchTab('final')">মূল হিসাব</button>
+</div>
+
+<div class="tab-panel active" id="tab-main">
+
+  <!-- রহিম হিসাব -->
+  <div class="ledger" id="card-rahim">
+    <div class="ledger-head">
+      <h2>রহিম হিসাব</h2>
+      <span id="rahim-date"></span>
+    </div>
+
+    <div class="row"><label>গতকালের সর্বশেষ ব্যালেন্স</label><span class="sign"></span><input type="number" id="r-total" placeholder="0"></div>
+    <div class="row"><label>জমা</label><span class="sign">+</span><input type="number" id="r-deposit" placeholder="0"></div>
+
+    <div class="group-label">খরচ / প্রদান</div>
+    <div class="row"><label>রহিম বিকাশ</label><span class="sign">−</span><input type="number" id="r-bkash" placeholder="0"></div>
+    <div class="row"><label>রহিম ব্যাংকিং</label><span class="sign">−</span><input type="number" id="r-banking" placeholder="0"></div>
+    <div class="row"><label>ক্যাশ প্রদান</label><span class="sign">−</span><input type="number" id="r-cashpay" placeholder="0"></div>
+    <div class="row"><label>রুবেল বিকাশ</label><span class="sign">−</span><input type="number" id="r-rubel-bkash" placeholder="0"></div>
+    <div class="row"><label>রুবেল ব্যাংকিং</label><span class="sign">−</span><input type="number" id="r-rubel-banking" placeholder="0"></div>
+    <div class="row"><label>রুবেল ক্যাশ</label><span class="sign">−</span><input type="number" id="r-rubel-cash" placeholder="0"></div>
+    <div class="row"><label>অন্যান্য</label><span class="sign">−</span><input type="number" id="r-others" placeholder="0"></div>
+    <div class="row"><label>খরচ</label><span class="sign">−</span><input type="number" id="r-expense" placeholder="0"></div>
+
+    <div class="result-row">
+      <span class="rlabel">অবশিষ্ট বর্তমান ব্যালেন্স</span>
+      <span class="rvalue" id="r-current">৳ 1,21,573</span>
+    </div>
+
+    <div class="btn-row">
+      <button class="ghost" onclick="clearRahim()">ক্লিয়ার</button>
+      <button class="primary" onclick="submitRahim()">সাবমিট</button>
+      <button onclick="takeScreenshot('card-rahim','rahim-hisab')">স্ক্রিনশট</button>
+    </div>
+  </div>
+
+</div>
+
+<div class="tab-panel" id="tab-sohag">
+  <div class="ledger" id="card-sohag">
+    <div class="ledger-head">
+      <h2>সোহাগ হিসাব</h2>
+      <span id="sohag-date"></span>
+    </div>
+
+    <div class="row"><label>বর্তমান ব্যালেন্স</label><span class="sign"></span><input type="number" id="sohag-opening" placeholder="0"></div>
+    <div class="row"><label>জমা</label><span class="sign">+</span><input type="number" id="sohag-deposit" placeholder="0"></div>
+    <div class="row"><label>উত্তোলন</label><span class="sign">−</span><input type="number" id="sohag-withdraw" placeholder="0" value="500" oninput="syncSohagNoteAmount()"></div>
+
+    <div class="group-label">নোট (কি খাতে নিয়েছে)</div>
+    <div class="row"><input type="text" class="dhar-label-input" id="sohag-note1-label" value="ওয়াইফাই বিল বাবদ" placeholder="কি খাতে নিয়েছে লিখুন" oninput="saveSohag()"><span class="sign"></span><input type="number" id="sohag-note1-amount" placeholder="0" value="500" readonly=""></div>
+
+    <div class="result-row">
+      <span class="rlabel">বর্তমান ব্যালেন্স</span>
+      <span class="rvalue" id="sohag-current">৳ −5,900</span>
+    </div>
+
+    <div class="btn-row">
+      <button class="ghost" onclick="clearSohag()">ক্লিয়ার</button>
+      <button class="primary" onclick="submitSohag()">সাবমিট</button>
+      <button onclick="takeScreenshot('card-sohag','sohag-hisab')">স্ক্রিনশট</button>
+    </div>
+  </div>
+</div>
+
+<div class="tab-panel" id="tab-draft">
+  <div class="draft-wrap">
+    <div class="draft-toolbar">
+      <p class="app-sub" id="draft-date"></p>
+      <div class="btn-row" style="margin-top:0;">
+        <button class="ghost" onclick="clearDraft()">ক্লিয়ার</button>
+        <button class="primary" onclick="submitDraftToMain()">সাবমিট → মূল হিসাব</button>
+      </div>
+    </div>
+
+    <div id="draft-people"></div>
+
+    <button class="add-person-btn" onclick="addPerson()">+ নতুন নাম যোগ করুন</button>
+
+    <div class="final-card">
+      <h3>সর্বমোট (সকল নাম)</h3>
+      <div class="final-amount" id="draft-grand-total">৳ 0</div>
+    </div>
+
+    <div class="note">
+      প্রতিটি ক্যাটাগরির ঘরের পাশে "+ ঘর যোগ করুন" দিয়ে নতুন ঘর যোগ করুন। যে নামের কার্ডে "সাবমিট → মূল হিসাব" চাপবেন, সেই নামের বিকাশ/ব্যাংকিং/ক্যাশ মোট মূল হিসাবের নির্দিষ্ট ঘরে স্বয়ংক্রিয়ভাবে বসবে।
+    </div>
+  </div>
+</div>
+
+<div class="tab-panel" id="tab-second">
+
+  <!-- সকল হিসাব -->
+  <div class="ledger" id="card-second">
+    <div class="ledger-head">
+      <h2>ব্যালেন্স হিসাব</h2>
+      <span id="second-date"></span>
+    </div>
+
+    <div class="group-label gl-invest">ইনভেষ্টমেন্ট (আলাদা হিসাব)</div>
+    <div class="row"><label>ইমরান ইনভেষ্টমেন্ট</label><span class="sign">+</span><input type="number" id="investment" placeholder="0" oninput="calcSecond()"></div>
+    <div class="subtotal-row category-total ct-invest"><span>মোট ইনভেষ্টমেন্ট</span><strong id="s-investment-total">৳ 3,30,000</strong></div>
+
+    <div class="group-label gl-bkash">বিকাশ</div>
+    <div class="row"><label>বিকাশ ৩৪১</label><span class="sign"></span><input type="number" id="s-bkash1" placeholder="0" oninput="calcSecond()"></div>
+    <div class="row"><label>বিকাশ ৬৪৮</label><span class="sign"></span><input type="number" id="s-bkash2" placeholder="0" oninput="calcSecond()"></div>
+    <div class="row"><label>বিকাশ ৮১০</label><span class="sign"></span><input type="number" id="s-bkash3" placeholder="0" oninput="calcSecond()"></div>
+    <div class="row"><label>বিকাশ ৬৪৭</label><span class="sign"></span><input type="number" id="s-bkash4" placeholder="0" oninput="calcSecond()"></div>
+    <div class="subtotal-row category-total ct-bkash"><span>মোট বিকাশ</span><strong id="s-bkash-total">৳ 29,734</strong></div>
+
+    <div class="group-label gl-bank">ব্যাংক</div>
+    <div class="row"><label>ইসলামি ব্যাংক</label><span class="sign"></span><input type="number" id="s-islami" placeholder="0" oninput="calcSecond()"></div>
+    <div class="row"><label>সিটি ব্যাংক</label><span class="sign"></span><input type="number" id="s-city" placeholder="0" oninput="calcSecond()"></div>
+    <div class="row"><label>আইএফআইসি ব্যাংক</label><span class="sign"></span><input type="number" id="s-ific" placeholder="0" oninput="calcSecond()"></div>
+    <div class="row"><label>ডাচ বাংলা ব্যাংক</label><span class="sign"></span><input type="number" id="s-dbbl" placeholder="0" oninput="calcSecond()"></div>
+    <div class="subtotal-row category-total ct-bank"><span>মোট ব্যাংক</span><strong id="s-bank-total">৳ 48,940</strong></div>
+
+    <div class="group-label gl-cash">ক্যাশ</div>
+    <div class="row"><label>মারুফ ক্যাশ</label><span class="sign"></span><input type="number" id="s-cash1" placeholder="0" oninput="calcSecond()"></div>
+    <div class="row"><label>অন্যান্য ক্যাশ</label><span class="sign"></span><input type="number" id="s-cash2" placeholder="0" oninput="calcSecond()"></div>
+    <div class="row"><label>এক্সট্রা ক্যাশ ১</label><span class="sign"></span><input type="number" id="s-extra-cash1" placeholder="0" oninput="calcSecond()"></div>
+    <div class="row"><label>এক্সট্রা ক্যাশ ২</label><span class="sign"></span><input type="number" id="s-extra-cash2" placeholder="0" oninput="calcSecond()"></div>
+    <div class="subtotal-row category-total ct-cash"><span>মোট ক্যাশ (সব ক্যাশ)</span><strong id="s-cash-total">৳ 1,09,320</strong></div>
+
+    <div class="group-label gl-dhar">ধার</div>
+    <div class="row"><label>জয়া ধার</label><span class="sign">−</span><input type="number" id="s-jaya-dhar" placeholder="0" oninput="calcSecond()"></div>
+    <div class="row"><label>সোহাগ ধার</label><span class="sign">−</span><input type="number" id="s-bhai-dhar" placeholder="0" oninput="calcSecond()"></div>
+    <div class="row"><label>এমবি/মিনিট ধার</label><span class="sign">−</span><input type="number" id="s-mb-minute-dhar" placeholder="0" oninput="calcSecond()"></div>
+    <div class="row"><label>রাফি ধার</label><span class="sign">−</span><input type="number" id="s-rafi-dhar" placeholder="0" oninput="calcSecond()"></div>
+    <div class="row"><input type="text" class="dhar-label-input" id="s-other-dhar1-label" value="অন্যান্য ধার" placeholder="নাম লিখুন" oninput="saveSecond()"><span class="sign">−</span><input type="number" id="s-other-dhar1" placeholder="0" oninput="calcSecond()"></div>
+    <div class="row"><input type="text" class="dhar-label-input" id="s-other-dhar2-label" value="অন্যান্য ধার" placeholder="নাম লিখুন" oninput="saveSecond()"><span class="sign">−</span><input type="number" id="s-other-dhar2" placeholder="0" oninput="calcSecond()"></div>
+    <div class="row"><input type="text" class="dhar-label-input" id="s-other-dhar3-label" value="অন্যান্য ধার" placeholder="নাম লিখুন" oninput="saveSecond()"><span class="sign">−</span><input type="number" id="s-other-dhar3" placeholder="0" oninput="calcSecond()"></div>
+    <div class="row"><input type="text" class="dhar-label-input" id="s-other-dhar4-label" value="অন্যান্য ধার" placeholder="নাম লিখুন" oninput="saveSecond()"><span class="sign">−</span><input type="number" id="s-other-dhar4" placeholder="0" oninput="calcSecond()"></div>
+    <div class="subtotal-row category-total ct-dhar"><span>মোট ধার</span><strong id="s-dhar-total">৳ −2,63,700</strong></div>
+
+
+    <div class="result-row">
+      <span class="rlabel">সকল খাতের মোট ব্যালেন্স</span>
+      <span class="rvalue" id="s-total">৳ 1,87,994</span>
+    </div>
+    <div class="subtotal-row"><span>অবস্থা</span><span id="s-status" style="color: var(--good);">পাবো</span></div>
+
+    <div class="btn-row">
+      <button onclick="takeScreenshot('card-second','sokol-hisab')">স্ক্রিনশট</button>
+    </div>
+  </div>
+
+  <div class="note">
+    ধারের ঘরে আপনি যাদেরকে ধার দিয়েছেন (অর্থাৎ তারা আপনার কাছে ঋণী), তাদের এমাউন্ট সবসময় ঋণাত্মক (−) লিখুন, যেমন −৫০০০। আর কেউ যদি উল্টো আপনাকে ধার দিয়ে থাকে (আপনি তার কাছে ঋণী), সেই এমাউন্ট ধনাত্মক (+) লিখুন।<br>
+    রহিমের ব্যালেন্স আলাদা। চূড়ান্ত হিসাব = রহিম ব্যালেন্স + ইমরান ইনভেষ্টমেন্ট + মোট ধার = অবশিষ্ট ব্যালেন্স (ধার ঋণাত্মক হলে এটি বিয়োগ হিসেবেই কাজ করবে)। সকল খাতের ব্যালেন্স (যোগফল) = বিকাশ + ব্যাংক + সব ক্যাশ (মারুফ/অন্যান্য/এক্সট্রা) + ইমরান ইনভেষ্টমেন্ট। এরপর সকল খাতের ব্যালেন্স − অবশিষ্ট ব্যালেন্স = পাবো/দিবো।<br>
+    তথ্য স্বয়ংক্রিয়ভাবে এই ব্রাউজারে সংরক্ষিত থাকে। পেজ রিলোড বা বন্ধ করে আবার খুললেও হিসাব থাকবে।
+  </div>
+
+</div>
+
+<div class="tab-panel" id="tab-final">
+  <div class="draft-wrap">
+    <div class="final-card final-calculation-card" id="card-final">
+      <h3>চূড়ান্ত হিসাব</h3>
+      <div class="calc-lines">
+        <div class="calc-line"><span>রহিম ব্যালেন্স</span><strong id="f-rahim">৳ 1,21,573</strong></div>
+        <div class="calc-line"><span>+ ইমরান ইনভেষ্টমেন্ট</span><strong id="f-investment">৳ 3,30,000</strong></div>
+        <div class="calc-line calc-line-total"><span>মোট ব্যালেন্স</span><strong id="f-combined">৳ 4,51,573</strong></div>
+        <div class="calc-line"><span>+ মোট ধার</span><strong id="f-dhar">৳ −2,63,700</strong></div>
+        <div class="calc-line calc-line-total"><span>অবশিষ্ট ব্যালেন্স</span><strong id="f-remaining">৳ 1,87,873</strong></div>
+        <div class="calc-line"><span>সকল খাতের ব্যালেন্স (যোগফল)</span><strong id="f-all-accounts">৳ 1,87,994</strong></div>
+        <div class="calc-line calc-line-result"><span id="f-label">পাবো</span><strong id="f-amount" style="color: var(--good);">+ ৳ 121</strong></div>
+      </div>
+      <span class="final-tag tag-good" id="f-tag">পাবো</span>
+      <div class="btn-row" style="justify-content:center;">
+        <button onclick="takeScreenshot('card-final','mul-hisab')">স্ক্রিনশট</button>
+      </div>
+    </div>
+
+    <div class="note">
+      রহিমের ব্যালেন্স আলাদা। চূড়ান্ত হিসাব = রহিম ব্যালেন্স + ইমরান ইনভেষ্টমেন্ট + মোট ধার = অবশিষ্ট ব্যালেন্স (যাদেরকে ধার দেওয়া হয়েছে তাদের এমাউন্ট ঋণাত্মক থাকায় এটি স্বয়ংক্রিয়ভাবে বিয়োগ হয়ে যায়)। সকল খাতের ব্যালেন্স (যোগফল) = বিকাশ + ব্যাংক + সব ক্যাশ (মারুফ/অন্যান্য/এক্সট্রা) + ইমরান ইনভেষ্টমেন্ট। এরপর সকল খাতের ব্যালেন্স − অবশিষ্ট ব্যালেন্স = পাবো/দিবো।
+    </div>
+  </div>
+</div>
+
+<div class="hk-modal" id="hk-modal" onclick="if(event.target===this)hkClose()">
+  <div class="hk-box">
+    <div class="hk-head"><h2>ব্যাকআপ ও রিকভারি</h2><button type="button" class="ghost" onclick="hkClose()">✕</button></div>
+    <div id="hk-modal-body"></div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const RAHIM_FIELDS = ['r-total','r-deposit','r-bkash','r-banking','r-cashpay','r-rubel-bkash','r-rubel-banking','r-rubel-cash','r-others','r-expense'];
+const SOHAG_FIELDS = ['sohag-opening','sohag-deposit','sohag-withdraw','sohag-note1-label','sohag-note1-amount'];
+const SECOND_FIELDS = ['investment','s-bkash1','s-bkash2','s-bkash3','s-bkash4','s-islami','s-city','s-ific','s-dbbl','s-cash1','s-cash2','s-jaya-dhar','s-bhai-dhar','s-mb-minute-dhar','s-rafi-dhar','s-other-dhar1','s-other-dhar2','s-other-dhar3','s-other-dhar4','s-extra-cash1','s-extra-cash2','s-other-dhar1-label','s-other-dhar2-label','s-other-dhar3-label','s-other-dhar4-label'];
+
+function autosizeNumberInput(input){
+  // সব ঘরের সাইজ এখন একটি নির্দিষ্ট মাপে (CSS) স্থির রাখা হচ্ছে —
+  // তাই এখানে আর কিছু করার দরকার নেই।
+  return;
+}
+
+function autosizeAllNumberInputs(){
+  document.querySelectorAll('input[type="number"]').forEach(autosizeNumberInput);
+}
+
+document.addEventListener('input', (e)=>{
+  if(e.target && e.target.matches('input[type="number"]')){
+    autosizeNumberInput(e.target);
+  }
+});
+
+function num(id){
+  const v = parseFloat(document.getElementById(id).value);
+  return isNaN(v) ? 0 : v;
+}
+function fmt(n){
+  const rounded = Math.round(n*100)/100;
+  const sign = rounded < 0 ? '−' : '';
+  return '৳ ' + sign + Math.abs(rounded).toLocaleString('en-IN');
+}
+function showToast(msg){
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'), 1600);
+}
+function setDates(){
+  const parts = new Intl.DateTimeFormat('bn-BD', {day:'numeric', month:'long', year:'numeric'}).formatToParts(new Date());
+  let dayStr = '', monthStr = '', yearStr = '';
+  parts.forEach(p=>{
+    if(p.type === 'day') dayStr = p.value;
+    else if(p.type === 'month') monthStr = p.value;
+    else if(p.type === 'year') yearStr = p.value;
+  });
+  const dHtml = '<span style="color:var(--brand);font-weight:700;">' + dayStr + '</span> ' +
+                '<span style="color:var(--gold);font-weight:700;">' + monthStr + '</span> ' +
+                '<span style="color:var(--acc-rahim);font-weight:700;">' + yearStr + '</span>';
+  document.getElementById('rahim-date').innerHTML = dHtml;
+  document.getElementById('second-date').innerHTML = dHtml;
+  document.getElementById('sohag-date').innerHTML = dHtml;
+  document.getElementById('draft-date').innerHTML = dHtml;
+}
+
+function switchTab(tab){
+  document.getElementById('tab-main').classList.toggle('active', tab==='main');
+  document.getElementById('tab-sohag').classList.toggle('active', tab==='sohag');
+  document.getElementById('tab-draft').classList.toggle('active', tab==='draft');
+  document.getElementById('tab-second').classList.toggle('active', tab==='second');
+  document.getElementById('tab-final').classList.toggle('active', tab==='final');
+  document.getElementById('tab-btn-main').classList.toggle('active', tab==='main');
+  document.getElementById('tab-btn-sohag').classList.toggle('active', tab==='sohag');
+  document.getElementById('tab-btn-draft').classList.toggle('active', tab==='draft');
+  document.getElementById('tab-btn-second').classList.toggle('active', tab==='second');
+  document.getElementById('tab-btn-final').classList.toggle('active', tab==='final');
+}
+
+let rahimCurrent = 0;
+let secondTotal = 0;
+let isLoading = true;
+
+function computeRahimCurrent(){
+  const total = num('r-total');
+  const deposit = num('r-deposit');
+  const deductions = num('r-bkash') + num('r-banking') + num('r-cashpay') +
+                     num('r-rubel-bkash') + num('r-rubel-banking') + num('r-rubel-cash') + num('r-others') + num('r-expense');
+  // রহিমের হিসাব সম্পূর্ণ আলাদা: ইনভেষ্টমেন্ট বা অন্য খাত এখানে ধরা হবে না
+  return total + deposit - deductions;
+}
+
+function submitRahim(){
+  rahimCurrent = computeRahimCurrent();
+  document.getElementById('r-current').textContent = fmt(rahimCurrent);
+  saveRahim();
+  calcFinal();
+  showToast('বর্তমান ব্যালেন্স আপডেট হয়েছে');
+}
+
+function clearRahim(){
+  ['r-deposit','r-bkash','r-banking','r-cashpay','r-rubel-bkash','r-rubel-banking','r-rubel-cash','r-others','r-expense'].forEach(id=>{
+    document.getElementById(id).value = '';
+  });
+  rahimCurrent = computeRahimCurrent();
+  document.getElementById('r-current').textContent = fmt(rahimCurrent);
+  saveRahim();
+  calcFinal();
+  showToast('ক্লিয়ার করা হয়েছে');
+}
+
+let sohagCurrent = 0;
+
+function computeSohagCurrent(){
+  const opening = num('sohag-opening');
+  const deposit = num('sohag-deposit');
+  const withdraw = num('sohag-withdraw');
+  return opening + deposit - withdraw;
+}
+
+function syncSohagNoteAmount(){
+  document.getElementById('sohag-note1-amount').value = document.getElementById('sohag-withdraw').value;
+  saveSohag();
+}
+
+function submitSohag(){
+  sohagCurrent = computeSohagCurrent();
+  document.getElementById('sohag-current').textContent = fmt(sohagCurrent);
+  saveSohag();
+  // সোহাগ হিসাবের ব্যালেন্স স্বয়ংক্রিয়ভাবে ব্যালেন্স হিসাবের "সোহাগ ধার" ঘরে বসবে
+  document.getElementById('s-bhai-dhar').value = sohagCurrent || '';
+  calcSecond();
+  showToast('বর্তমান ব্যালেন্স আপডেট হয়েছে');
+}
+
+function clearSohag(){
+  ['sohag-deposit','sohag-withdraw'].forEach(id=>{
+    document.getElementById(id).value = '';
+  });
+  document.getElementById('sohag-note1-amount').value = '';
+  sohagCurrent = computeSohagCurrent();
+  document.getElementById('sohag-current').textContent = fmt(sohagCurrent);
+  saveSohag();
+  showToast('ক্লিয়ার করা হয়েছে');
+}
+
+function calcSecond(){
+  const investment = num('investment');
+  const bkash = num('s-bkash1') + num('s-bkash2') + num('s-bkash3') + num('s-bkash4');
+  const bank = num('s-islami') + num('s-city') + num('s-ific') + num('s-dbbl');
+  const cash = num('s-cash1') + num('s-cash2') + num('s-extra-cash1') + num('s-extra-cash2');
+  const dhar = num('s-jaya-dhar') + num('s-bhai-dhar') + num('s-mb-minute-dhar') +
+               num('s-rafi-dhar') + num('s-other-dhar1') + num('s-other-dhar2') +
+               num('s-other-dhar3') + num('s-other-dhar4');
+
+  // সকল খাতের বাস্তব ব্যালেন্স: বিকাশ + ব্যাংক + সব ক্যাশ।
+  // ইমরান ইনভেষ্টমেন্ট আলাদা; এটি এখানে যোগ হবে না।
+  secondTotal = bkash + bank + cash;
+
+  document.getElementById('s-total').textContent = fmt(secondTotal);
+  document.getElementById('s-investment-total').textContent = fmt(investment);
+  document.getElementById('s-bkash-total').textContent = fmt(bkash);
+  document.getElementById('s-bank-total').textContent = fmt(bank);
+  document.getElementById('s-cash-total').textContent = fmt(cash);
+  document.getElementById('s-dhar-total').textContent = fmt(dhar);
+
+  // চূড়ান্ত পার্থক্য = সকল খাতের ব্যালেন্স - রহিমের অবশিষ্ট ব্যালেন্স
+  // রহিমের অবশিষ্ট = রহিম ব্যালেন্স + ইমরান ইনভেষ্টমেন্ট + মোট ধার (ধার ঋণাত্মক হলে স্বয়ংক্রিয় বিয়োগ হয়)
+  const reconciliation = secondTotal - (computeRahimCurrent() + investment + dhar);
+  const statusEl = document.getElementById('s-status');
+  if(reconciliation > 0){ statusEl.textContent = 'পাবো'; statusEl.style.color = 'var(--good)'; }
+  else if(reconciliation < 0){ statusEl.textContent = 'দিবো'; statusEl.style.color = 'var(--bad)'; }
+  else { statusEl.textContent = 'সমান'; statusEl.style.color = 'var(--ink-soft)'; }
+  if(!isLoading) saveSecond();
+  calcFinal();
+}
+
+function calcFinal(){
+  const investment = num('investment');
+  const bkash = num('s-bkash1') + num('s-bkash2') + num('s-bkash3') + num('s-bkash4');
+  const bank = num('s-islami') + num('s-city') + num('s-ific') + num('s-dbbl');
+  // সব ক্যাশ এক সিরিয়ালে: মারুফ + অন্যান্য + সব এক্সট্রা ক্যাশ
+  const cash = num('s-cash1') + num('s-cash2') + num('s-extra-cash1') + num('s-extra-cash2');
+  const dhar = num('s-jaya-dhar') + num('s-bhai-dhar') + num('s-mb-minute-dhar') +
+               num('s-rafi-dhar') + num('s-other-dhar1') + num('s-other-dhar2') +
+               num('s-other-dhar3') + num('s-other-dhar4');
+  const rahimBalance = computeRahimCurrent();
+
+  // রহিমের নিজের ব্যালেন্স আলাদা। এরপর আলাদাভাবে ইমরান ইনভেষ্টমেন্ট যোগ হবে,
+  // তারপর মোট ধার যোগ হয়ে অবশিষ্ট ব্যালেন্স বের হবে (যাদেরকে ধার দেওয়া হয়েছে তাদের এমাউন্ট ঋণাত্মক থাকে বলে এটি স্বয়ংক্রিয়ভাবে বিয়োগ হয়ে যায়)।
+  const combined = rahimBalance + investment;
+  const remaining = combined + dhar;
+
+  // সকল খাতের হাতে থাকা ব্যালেন্স: বিকাশ + ব্যাংক + সব ক্যাশ।
+  // ইমরান ইনভেষ্টমেন্ট আলাদা ব্যক্তির হিসাব—এটি 'সকল খাতের ব্যালেন্স'-এ যোগ হবে না।
+  const allAccountsTotal = bkash + bank + cash;
+  const finalDifference = allAccountsTotal - remaining;
+
+  document.getElementById('s-investment-total').textContent = fmt(investment);
+  document.getElementById('s-bkash-total').textContent = fmt(bkash);
+  document.getElementById('s-bank-total').textContent = fmt(bank);
+  document.getElementById('s-cash-total').textContent = fmt(cash);
+  document.getElementById('s-dhar-total').textContent = fmt(dhar);
+  document.getElementById('s-total').textContent = fmt(allAccountsTotal);
+
+  const statusEl = document.getElementById('s-status');
+  if(finalDifference > 0){ statusEl.textContent = 'পাবো'; statusEl.style.color = 'var(--good)'; }
+  else if(finalDifference < 0){ statusEl.textContent = 'দিবো'; statusEl.style.color = 'var(--bad)'; }
+  else { statusEl.textContent = 'সমান'; statusEl.style.color = 'var(--ink-soft)'; }
+
+  document.getElementById('f-rahim').textContent = fmt(rahimBalance);
+  document.getElementById('f-investment').textContent = fmt(investment);
+  document.getElementById('f-combined').textContent = fmt(combined);
+  document.getElementById('f-dhar').textContent = fmt(dhar);
+  document.getElementById('f-remaining').textContent = fmt(remaining);
+  document.getElementById('f-all-accounts').textContent = fmt(allAccountsTotal);
+
+  const label = document.getElementById('f-label');
+  const amountEl = document.getElementById('f-amount');
+  if(finalDifference > 0){
+    label.textContent = 'পাবো';
+    amountEl.style.color = 'var(--good)';
+    amountEl.textContent = '+ ' + fmt(Math.abs(finalDifference));
+  }else if(finalDifference < 0){
+    label.textContent = 'দিবো';
+    amountEl.style.color = 'var(--bad)';
+    amountEl.textContent = '- ' + fmt(Math.abs(finalDifference));
+  }else{
+    label.textContent = 'সমান';
+    amountEl.style.color = '';
+    amountEl.textContent = fmt(0);
+  }
+
+  const tag = document.getElementById('f-tag');
+  if(finalDifference > 0){ tag.textContent='পাবো'; tag.className='final-tag tag-good'; }
+  else if(finalDifference < 0){ tag.textContent='দিবো'; tag.className='final-tag tag-bad'; }
+  else { tag.textContent='সমান'; tag.className='final-tag tag-neutral'; }
+}
+
+let storageOk = true;
+
+/* ---------- স্থায়ী ব্রাউজার স্টোরেজ ---------- */
+/* window.storage না থাকলেও localStorage ব্যবহার করে ডেটা রিলোডের পর রাখা হবে */
+
+function localGet(key){
+  try{
+    return __ls.getItem(key);
+  }catch(e){
+    console.error('localStorage read failed', e);
+    return null;
+  }
+}
+
+function localSet(key, value){
+  try{
+    __ls.setItem(key, value);
+    try{ if(HK_KEYS.indexOf(key) > -1){ hkOnChange(); gdChanged(); } }catch(_){}
+    return true;
+  }catch(e){
+    console.error('localStorage save failed', e);
+    return false;
+  }
+}
+
+async function saveAllData(){
+  // প্রথমে প্রতিটি হিসাব জোর করে সেভ করা হচ্ছে, যাতে সবশেষ পরিবর্তনও ধরা পড়ে
+  await saveRahim();
+  await saveSohag();
+  await saveSecond();
+  await saveDraft();
+
+  // এখন সব ডেটা একসাথে 'সর্বশেষ ব্যাকআপ' হিসাবে সংরক্ষণ করা হচ্ছে
+  const backup = {
+    app: 'হিসাব খাতা',
+    saved_at: new Date().toISOString(),
+    rahim_account: localGet('rahim_account'),
+    sohag_account: localGet('sohag_account'),
+    second_account: localGet('second_account'),
+    draft_account: localGet('draft_account')
+  };
+  const value = JSON.stringify(backup);
+  localSet('last_backup', value);
+
+  if(window.storage && typeof window.storage.set === 'function'){
+    try{
+      await window.storage.set('last_backup', value, false);
+    }catch(e){
+      /* window.storage না থাকলে localStorage ব্যবহার হবে */
+    }
+  }
+
+  hkSnapshotNow('ম্যানুয়াল সেভ', {force:true});
+  await hkMirrorNow();
+  showToast('সব ডেটা সেভ হয়েছে • স্ন্যাপশট ও মিরর কপি হালনাগাদ');
+}
+
+function downloadBackup(){
+  hkFlushUi();
+  const backup = hkBuildBackup();
+  const blob = new Blob([JSON.stringify(backup, null, 2)], {type:'application/json'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  const dateStr = new Date().toISOString().slice(0,10);
+  a.href = url;
+  a.download = 'hisab-khata-backup-' + dateStr + '.json';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+  hkMarkFile();
+  showToast('ব্যাকআপ ফাইল ডাউনলোড হয়েছে');
+}
+
+function restoreBackupOld(event){ /* পুরোনো সংস্করণ — এখন hkRestoreFile ব্যবহার হয় (নিচে restoreBackup) */
+  const input = event.target;
+  const file = input.files && input.files[0];
+  if(!file) return;
+
+  const reader = new FileReader();
+  reader.onload = function(e){
+    try{
+      const data = JSON.parse(e.target.result);
+      const ok = confirm('বর্তমান সব হিসাব মুছে এই ব্যাকআপ ফাইলের ডেটা বসানো হবে। আগে চালিয়ে যেতে চান?');
+      if(!ok){ input.value=''; return; }
+
+      if(data.rahim_account) localSet('rahim_account', data.rahim_account);
+      if(data.sohag_account) localSet('sohag_account', data.sohag_account);
+      if(data.second_account) localSet('second_account', data.second_account);
+      if(data.draft_account) localSet('draft_account', data.draft_account);
+
+      showToast('ব্যাকআপ পুনরুদ্ধার সম্পন্ন হয়েছে, পাতা রিলোড হচ্ছে...');
+      setTimeout(()=>location.reload(), 900);
+    }catch(err){
+      alert('এই ফাইলটি সঠিক ব্যাকআপ ফাইল নয়।');
+    }
+    input.value='';
+  };
+  reader.readAsText(file);
+}
+
+async function saveRahim(){
+  const data = {};
+  RAHIM_FIELDS.forEach(id => data[id] = document.getElementById(id).value);
+  data.current = rahimCurrent;
+
+  const value = JSON.stringify(data);
+
+  // প্রথমে সব ব্রাউজারে কাজ করা localStorage-এ সংরক্ষণ
+  localSet('rahim_account', value);
+
+  // window.storage থাকলে সেখানেও সংরক্ষণ
+  if(window.storage && typeof window.storage.set === 'function'){
+    try{
+      await window.storage.set('rahim_account', value, false);
+    }catch(e){
+      /* window.storage না থাকলে localStorage ব্যবহার হবে, কনসোলে বার্তা দরকার নেই */
+    }
+  }
+}
+
+async function saveSohag(){
+  const data = {};
+  SOHAG_FIELDS.forEach(id => data[id] = document.getElementById(id).value);
+  data.current = sohagCurrent;
+
+  const value = JSON.stringify(data);
+
+  localSet('sohag_account', value);
+
+  if(window.storage && typeof window.storage.set === 'function'){
+    try{
+      await window.storage.set('sohag_account', value, false);
+    }catch(e){
+      /* window.storage না থাকলে localStorage ব্যবহার হবে, কনসোলে বার্তা দরকার নেই */
+    }
+  }
+}
+
+async function saveSecond(){
+  const data = {};
+  SECOND_FIELDS.forEach(id => data[id] = document.getElementById(id).value);
+  data.total = secondTotal;
+
+  const value = JSON.stringify(data);
+
+  localSet('second_account', value);
+
+  if(window.storage && typeof window.storage.set === 'function'){
+    try{
+      await window.storage.set('second_account', value, false);
+    }catch(e){
+      /* window.storage না থাকলে localStorage ব্যবহার হবে, কনসোলে বার্তা দরকার নেই */
+    }
+  }
+}
+
+function loadRahimFromData(data){
+  if(!data) return;
+  RAHIM_FIELDS.forEach(id => {
+    if(data[id] !== undefined) document.getElementById(id).value = data[id];
+  });
+}
+
+function loadSohagFromData(data){
+  if(!data) return;
+  SOHAG_FIELDS.forEach(id => {
+    if(data[id] !== undefined) document.getElementById(id).value = data[id];
+  });
+}
+
+function loadSecondFromData(data){
+  if(!data) return;
+  SECOND_FIELDS.forEach(id => {
+    if(data[id] !== undefined) document.getElementById(id).value = data[id];
+  });
+}
+
+function todayKey(){
+  return new Date().toDateString();
+}
+
+function applyDailyRollover(){
+  const _wasSynced = (hkSig(hkCollect()) === localGet('gd_sig'));
+  const lastDate = localGet('active_date');
+  const today = todayKey();
+
+  if(lastDate === today) return; // আজকেই আগে একবার খোলা হয়েছে, রোলওভার লাগবে না
+
+  if(lastDate){
+    // রহিম হিসাব: আগের দিনের 'বর্তমান ব্যালেন্স' আজকের 'গতকালের সর্বশেষ ব্যালেন্স' ঘরে বসছে
+    const prevRahim = computeRahimCurrent();
+    document.getElementById('r-total').value = prevRahim || 0;
+    ['r-deposit','r-bkash','r-banking','r-cashpay','r-rubel-bkash','r-rubel-banking','r-rubel-cash','r-others','r-expense'].forEach(id=>{
+      document.getElementById(id).value = '';
+    });
+    saveRahim();
+
+    // সোহাগ হিসাব: আগের দিনের 'বর্তমান ব্যালেন্স' আজকের শুরুর ব্যালেন্স হিসাবে বসছে
+    const prevSohag = computeSohagCurrent();
+    document.getElementById('sohag-opening').value = prevSohag || 0;
+    ['sohag-deposit','sohag-withdraw'].forEach(id=>{
+      document.getElementById(id).value = '';
+    });
+    saveSohag();
+  }
+
+  localSet('active_date', today);
+  if(_wasSynced) __ls.setItem('gd_sig', hkSig(hkCollect()));
+}
+
+async function loadAll(){
+  // সবচেয়ে নির্ভরযোগ্যভাবে localStorage থেকে আগে লোড
+  try{
+    const rLocal = localGet('rahim_account');
+    if(rLocal) loadRahimFromData(JSON.parse(rLocal));
+  }catch(e){
+    /* local Rahim data could not be read */
+  }
+
+  try{
+    const sLocal = localGet('second_account');
+    if(sLocal) loadSecondFromData(JSON.parse(sLocal));
+  }catch(e){
+    /* local Second data could not be read */
+  }
+
+  let sohagLoaded = false;
+  try{
+    const sohagLocal = localGet('sohag_account');
+    if(sohagLocal){
+      loadSohagFromData(JSON.parse(sohagLocal));
+      sohagLoaded = true;
+    }
+  }catch(e){
+    /* local Sohag data could not be read */
+  }
+
+  // localStorage-এ ডেটা না থাকলে window.storage থেকে পুরোনো ডেটা আনার চেষ্টা
+  if(window.storage && typeof window.storage.get === 'function'){
+    try{
+      if(!localGet('rahim_account')){
+        const r = await window.storage.get('rahim_account', false);
+        if(r && r.value){
+          loadRahimFromData(JSON.parse(r.value));
+          localSet('rahim_account', r.value);
+        }
+      }
+    }catch(e){ /* no saved data yet */ }
+
+    try{
+      if(!localGet('second_account')){
+        const s = await window.storage.get('second_account', false);
+        if(s && s.value){
+          loadSecondFromData(JSON.parse(s.value));
+          localSet('second_account', s.value);
+        }
+      }
+    }catch(e){ /* no saved data yet */ }
+
+    try{
+      if(!sohagLoaded){
+        const so = await window.storage.get('sohag_account', false);
+        if(so && so.value){
+          loadSohagFromData(JSON.parse(so.value));
+          localSet('sohag_account', so.value);
+          sohagLoaded = true;
+        }
+      }
+    }catch(e){ /* no saved data yet */ }
+  }
+
+  // প্রথমবার ব্যবহারে সোহাগের বর্তমান ব্যালেন্স ডিফল্ট -৭২৫০
+  if(!sohagLoaded){
+    document.getElementById('sohag-opening').value = 0;
+  }
+
+  applyDailyRollover();
+
+  rahimCurrent = computeRahimCurrent();
+  document.getElementById('r-current').textContent = fmt(rahimCurrent);
+  document.getElementById('sohag-note1-amount').value = document.getElementById('sohag-withdraw').value;
+  sohagCurrent = computeSohagCurrent();
+  document.getElementById('sohag-current').textContent = fmt(sohagCurrent);
+  calcSecond();
+  calcFinal();
+  isLoading = false;
+}
+
+// রহিমের ঘরে টাইপ করার সাথে সাথেই সেভ হবে
+RAHIM_FIELDS.forEach(id => {
+  document.getElementById(id).addEventListener('input', () => {
+    rahimCurrent = computeRahimCurrent();
+    document.getElementById('r-current').textContent = fmt(rahimCurrent);
+    saveRahim();
+    calcFinal();
+  });
+});
+
+// সোহাগের ঘরে টাইপ করার সাথে সাথেই সেভ হবে
+SOHAG_FIELDS.forEach(id => {
+  document.getElementById(id).addEventListener('input', () => {
+    sohagCurrent = computeSohagCurrent();
+    document.getElementById('sohag-current').textContent = fmt(sohagCurrent);
+    saveSohag();
+  });
+});
+
+async function takeScreenshot(elementId, filename){
+  const el = document.getElementById(elementId);
+  // স্ক্রিনশটে ক্লিয়ার/সাবমিট/স্ক্রিনশট বাটন যেনো না আসে, তাই সাময়িকভাবে লুকিয়ে রাখা হচ্ছে
+  const btnRows = el.querySelectorAll('.btn-row');
+  const prevDisplays = [];
+  btnRows.forEach(btnRow=>{
+    prevDisplays.push(btnRow.style.display);
+    btnRow.style.display = 'none';
+  });
+  showToast('ছবি তৈরি হচ্ছে...');
+  try{
+    const canvas = await html2canvas(el, {backgroundColor:'#FFFFFF', scale:2});
+    canvas.toBlob(async (blob)=>{
+      if(navigator.share && navigator.canShare && navigator.canShare({files:[new File([blob], filename+'.png', {type:'image/png'})]})){
+        try{
+          await navigator.share({files:[new File([blob], filename+'.png', {type:'image/png'})], title:filename});
+          return;
+        }catch(e){ /* fall through to download */ }
+      }
+      const link = document.createElement('a');
+      link.download = filename + '.png';
+      link.href = URL.createObjectURL(blob);
+      link.click();
+    });
+  }catch(e){
+    console.error(e);
+    showToast('স্ক্রিনশট তৈরি করা যায়নি');
+  }finally{
+    btnRows.forEach((btnRow, i)=>{ btnRow.style.display = prevDisplays[i]; });
+  }
+}
+
+/* ---------- বিবরণী হিসাব ---------- */
+
+const DRAFT_CATS = [
+  {key:'bkash', label:'বিকাশ', defaultRows:5},
+  {key:'banking', label:'ব্যাংকিং', defaultRows:4},
+  {key:'cash', label:'ক্যাশ', defaultRows:3}
+];
+
+let draftData = { people: [] };
+let draftPersonSeq = 0;
+let draftLoading = true;
+let draftSaveTimer = null;
+
+function defaultPerson(name){
+  draftPersonSeq++;
+  const cats = {};
+  DRAFT_CATS.forEach(c => { cats[c.key] = new Array(c.defaultRows).fill(''); });
+  return { id:'p'+Date.now()+'_'+draftPersonSeq, name:name, cats:cats };
+}
+
+function defaultDraftData(){
+  return { people:[ defaultPerson('রহিম'), defaultPerson('রুবেল') ] };
+}
+
+function findPerson(pid){
+  return draftData.people.find(p => p.id === pid);
+}
+
+function catSum(person, key){
+  return person.cats[key].reduce((s,v)=>{ const n=parseFloat(v); return s + (isNaN(n)?0:n); }, 0);
+}
+function personTotal(person){
+  return DRAFT_CATS.reduce((s,c)=> s + catSum(person, c.key), 0);
+}
+function draftGrandTotal(){
+  return draftData.people.reduce((s,p)=> s + personTotal(p), 0);
+}
+
+function buildEntryRow(person, catKey, idx){
+  const row = document.createElement('div');
+  row.className = 'entry-row';
+
+  const input = document.createElement('input');
+  input.type = 'number';
+  input.placeholder = '0';
+  input.value = person.cats[catKey][idx] || '';
+  input.oninput = (e)=>{
+    person.cats[catKey][idx] = e.target.value;
+    updateCatAndTotals(person, catKey);
+    scheduleDraftSave();
+    autosizeNumberInput(e.target);
+  };
+
+  const rmBtn = document.createElement('button');
+  rmBtn.type = 'button';
+  rmBtn.className = 'entry-remove';
+  rmBtn.textContent = '×';
+  rmBtn.title = 'এই ঘরটি মুছুন';
+  rmBtn.onclick = ()=> removeRow(person.id, catKey, idx);
+
+  row.appendChild(input);
+  row.appendChild(rmBtn);
+  autosizeNumberInput(input);
+  return row;
+}
+
+function renderDraft(){
+  const wrap = document.getElementById('draft-people');
+  wrap.innerHTML = '';
+
+  draftData.people.forEach(person=>{
+    const card = document.createElement('div');
+    card.className = 'ledger person-card';
+    card.id = 'person-'+person.id;
+
+    const head = document.createElement('div');
+    head.className = 'person-head';
+
+    const nameInput = document.createElement('input');
+    nameInput.className = 'person-name-input';
+    nameInput.value = person.name;
+    nameInput.oninput = (e)=>{
+      person.name = e.target.value;
+      const label = document.getElementById('ptotal-label-'+person.id);
+      if(label) label.textContent = (person.name || 'নাম') + ' - মোট';
+      scheduleDraftSave();
+    };
+
+    const removeBtn = document.createElement('button');
+    removeBtn.type = 'button';
+    removeBtn.className = 'person-remove';
+    removeBtn.textContent = '✕';
+    removeBtn.title = 'এই নামটি মুছুন';
+    removeBtn.onclick = ()=> removePerson(person.id);
+
+    head.appendChild(nameInput);
+    head.appendChild(removeBtn);
+    card.appendChild(head);
+
+    DRAFT_CATS.forEach(catDef=>{
+      const block = document.createElement('div');
+      block.className = 'cat-block';
+
+      const title = document.createElement('div');
+      title.className = 'cat-title';
+      const titleLabel = document.createElement('span');
+      titleLabel.textContent = catDef.label;
+      const subtotal = document.createElement('span');
+      subtotal.className = 'cat-subtotal';
+      subtotal.id = 'cat-sub-'+person.id+'-'+catDef.key;
+      subtotal.textContent = fmt(catSum(person, catDef.key));
+      title.appendChild(titleLabel);
+      title.appendChild(subtotal);
+      block.appendChild(title);
+
+      const entryArea = document.createElement('div');
+      entryArea.className = 'cat-entry-area';
+
+      const rowsWrap = document.createElement('div');
+      rowsWrap.className = 'rows-wrap';
+      rowsWrap.id = 'rows-'+person.id+'-'+catDef.key;
+      person.cats[catDef.key].forEach((val, idx)=>{
+        rowsWrap.appendChild(buildEntryRow(person, catDef.key, idx));
+      });
+
+      const actions = document.createElement('div');
+      actions.className = 'cat-entry-actions';
+
+      const addBtn = document.createElement('button');
+      addBtn.type = 'button';
+      addBtn.className = 'add-row-btn';
+      addBtn.textContent = '+ ঘর যোগ করুন';
+      addBtn.onclick = ()=> addRow(person.id, catDef.key);
+
+      actions.appendChild(addBtn);
+
+      entryArea.appendChild(rowsWrap);
+      entryArea.appendChild(actions);
+      block.appendChild(entryArea);
+
+      card.appendChild(block);
+    });
+
+    const totalRow = document.createElement('div');
+    totalRow.className = 'person-total-row';
+    const tlabel = document.createElement('span');
+    tlabel.className = 'rlabel';
+    tlabel.id = 'ptotal-label-'+person.id;
+    tlabel.textContent = (person.name || 'নাম') + ' - মোট';
+    const tvalue = document.createElement('span');
+    tvalue.className = 'rvalue';
+    tvalue.id = 'ptotal-'+person.id;
+    tvalue.textContent = fmt(personTotal(person));
+    totalRow.appendChild(tlabel);
+    totalRow.appendChild(tvalue);
+    card.appendChild(totalRow);
+
+    wrap.appendChild(card);
+  });
+
+  updateDraftGrandTotal();
+}
+
+function updateCatAndTotals(person, catKey){
+  document.getElementById('cat-sub-'+person.id+'-'+catKey).textContent = fmt(catSum(person, catKey));
+  document.getElementById('ptotal-'+person.id).textContent = fmt(personTotal(person));
+  updateDraftGrandTotal();
+}
+
+function updateDraftGrandTotal(){
+  document.getElementById('draft-grand-total').textContent = fmt(draftGrandTotal());
+}
+
+function addRow(pid, catKey){
+  const person = findPerson(pid);
+  if(!person) return;
+  person.cats[catKey].push('');
+  const rowsWrap = document.getElementById('rows-'+pid+'-'+catKey);
+  const idx = person.cats[catKey].length - 1;
+  const rowEl = buildEntryRow(person, catKey, idx);
+  rowsWrap.appendChild(rowEl);
+  rowEl.querySelector('input').focus();
+  scheduleDraftSave();
+}
+
+function removeRow(pid, catKey, idx){
+  const person = findPerson(pid);
+  if(!person) return;
+  if(person.cats[catKey].length <= 1){
+    person.cats[catKey][0] = '';
+  } else {
+    person.cats[catKey].splice(idx, 1);
+  }
+  renderDraft();
+  scheduleDraftSave();
+}
+
+function addPerson(){
+  const name = prompt('নতুন নাম লিখুন:');
+  if(!name) return;
+  draftData.people.push(defaultPerson(name));
+  renderDraft();
+  scheduleDraftSave();
+}
+
+function removePerson(pid){
+  if(!confirm('এই নামটি এবং এর সব হিসাব মুছে ফেলতে চান?')) return;
+  draftData.people = draftData.people.filter(p => p.id !== pid);
+  renderDraft();
+  scheduleDraftSave();
+}
+
+function submitCategoryDraftToMain(pid, catKey){
+  const person = findPerson(pid);
+  if(!person) return;
+
+  const name = (person.name || '').trim().toLowerCase();
+  const total = catSum(person, catKey);
+
+  if(name === 'রহিম'){
+    const target = {
+      bkash:'r-bkash',
+      banking:'r-banking',
+      cash:'r-cashpay'
+    }[catKey];
+    if(target) document.getElementById(target).value = total || '';
+  }else if(name === 'রুবেল'){
+    const target = {
+      bkash:'r-rubel-bkash',
+      banking:'r-rubel-banking',
+      cash:'r-rubel-cash'
+    }[catKey];
+    if(target) document.getElementById(target).value = total || '';
+  }else{
+    showToast('এই নামের জন্য মূল হিসাবে নির্দিষ্ট ঘর নেই');
+    return;
+  }
+
+  rahimCurrent = computeRahimCurrent();
+  document.getElementById('r-current').textContent = fmt(rahimCurrent);
+  saveRahim();
+  calcFinal();
+
+  const catLabel = (DRAFT_CATS.find(c=>c.key===catKey) || {}).label || catKey;
+  showToast(person.name + ' এর ' + catLabel + ' হিসাব মূল হিসাবে বসানো হয়েছে');
+}
+
+function clearCategoryDraft(pid, catKey){
+  const person = findPerson(pid);
+  if(!person) return;
+
+  const current = person.cats[catKey] || [];
+  person.cats[catKey] = current.map(()=> '');
+  renderDraft();
+  scheduleDraftSave();
+
+  const catLabel = (DRAFT_CATS.find(c=>c.key===catKey) || {}).label || catKey;
+  showToast(person.name + ' এর ' + catLabel + ' বিবরণী ক্লিয়ার করা হয়েছে');
+}
+
+function submitPersonDraftToMain(pid){
+  const person = findPerson(pid);
+  if(!person) return;
+
+  const name = (person.name || '').trim().toLowerCase();
+
+  if(name === 'রহিম'){
+    document.getElementById('r-bkash').value = catSum(person, 'bkash') || '';
+    document.getElementById('r-banking').value = catSum(person, 'banking') || '';
+    document.getElementById('r-cashpay').value = catSum(person, 'cash') || '';
+  }else if(name === 'রুবেল'){
+    document.getElementById('r-rubel-bkash').value = catSum(person, 'bkash') || '';
+    document.getElementById('r-rubel-banking').value = catSum(person, 'banking') || '';
+    document.getElementById('r-rubel-cash').value = catSum(person, 'cash') || '';
+  }else{
+    showToast('এই নামের জন্য মূল হিসাবে নির্দিষ্ট ঘর নেই');
+    return;
+  }
+
+  rahimCurrent = computeRahimCurrent();
+  document.getElementById('r-current').textContent = fmt(rahimCurrent);
+  saveRahim();
+  calcFinal();
+  showToast(person.name + ' এর হিসাব মূল হিসাবে বসানো হয়েছে');
+}
+
+function clearPersonDraft(pid){
+  const person = findPerson(pid);
+  if(!person) return;
+
+  DRAFT_CATS.forEach(c=>{
+    person.cats[c.key] = person.cats[c.key].map(()=> '');
+  });
+  renderDraft();
+  scheduleDraftSave();
+  showToast(person.name + ' এর বিবরণী ক্লিয়ার করা হয়েছে');
+}
+
+function submitDraftToMain(){
+  const peopleByName = {};
+  draftData.people.forEach(person => {
+    const key = (person.name || '').trim().toLowerCase();
+    if(key) peopleByName[key] = person;
+  });
+
+  // রহিমের খসড়া → রহিমের খরচ/প্রদান
+  const rahim = peopleByName['রহিম'];
+  if(rahim){
+    document.getElementById('r-bkash').value = catSum(rahim, 'bkash') || '';
+    document.getElementById('r-banking').value = catSum(rahim, 'banking') || '';
+    document.getElementById('r-cashpay').value = catSum(rahim, 'cash') || '';
+  }
+
+  // রুবেলের খসড়া → রুবেলের খরচ/প্রদান
+  const rubel = peopleByName['রুবেল'];
+  if(rubel){
+    document.getElementById('r-rubel-bkash').value = catSum(rubel, 'bkash') || '';
+    document.getElementById('r-rubel-banking').value = catSum(rubel, 'banking') || '';
+    document.getElementById('r-rubel-cash').value = catSum(rubel, 'cash') || '';
+  }
+
+  rahimCurrent = computeRahimCurrent();
+  document.getElementById('r-current').textContent = fmt(rahimCurrent);
+  saveRahim();
+  calcFinal();
+  showToast('বিবরণী হিসাব মূল হিসাবে বসানো হয়েছে');
+}
+
+function clearDraft(){
+  draftData.people.forEach(person=>{
+    DRAFT_CATS.forEach(c=>{
+      person.cats[c.key] = person.cats[c.key].map(()=> '');
+    });
+  });
+  renderDraft();
+  scheduleDraftSave();
+  showToast('বিবরণী হিসাব ক্লিয়ার করা হয়েছে');
+  autosizeAllNumberInputs();
+}
+
+function scheduleDraftSave(){
+  if(draftLoading) return;
+  clearTimeout(draftSaveTimer);
+  draftSaveTimer = setTimeout(saveDraft, 500);
+}
+
+async function saveDraft(){
+  const value = JSON.stringify(draftData);
+
+  localSet('draft_account', value);
+
+  if(window.storage && typeof window.storage.set === 'function'){
+    try{
+      await window.storage.set('draft_account', value, false);
+    }catch(e){
+      /* window.storage না থাকলে localStorage ব্যবহার হবে */
+    }
+  }
+}
+
+async function loadDraft(){
+  let loaded = false;
+
+  try{
+    const localData = localGet('draft_account');
+    if(localData){
+      const parsed = JSON.parse(localData);
+      if(parsed && Array.isArray(parsed.people) && parsed.people.length){
+        draftData = parsed;
+        loaded = true;
+      }
+    }
+  }catch(e){
+    /* local draft data could not be read */
+  }
+
+  // localStorage-এ না থাকলে পুরোনো window.storage ডেটা ব্যবহার
+  if(!loaded && window.storage && typeof window.storage.get === 'function'){
+    try{
+      const d = await window.storage.get('draft_account', false);
+      if(d && d.value){
+        const parsed = JSON.parse(d.value);
+        if(parsed && Array.isArray(parsed.people) && parsed.people.length){
+          draftData = parsed;
+          localSet('draft_account', d.value);
+          loaded = true;
+        }
+      }
+    }catch(e){ /* no saved data yet */ }
+  }
+
+  if(!loaded) draftData = defaultDraftData();
+
+  renderDraft();
+  draftLoading = false;
+}
+
+/* =====================================================================
+   ৩ ধাপের ব্যাকআপ ও রিকভারি
+   ধাপ ১: অটো স্ন্যাপশট  (localStorage — সর্বশেষ ১০টি + প্রতিদিনের একটি)
+   ধাপ ২: মিরর কপি       (IndexedDB — আলাদা স্টোরেজ, সর্বশেষ + আগের একটি)
+   ধাপ ৩: ফাইল ব্যাকআপ   (JSON ফাইল / ডেটাসহ HTML — চেকসামসহ)
+   ===================================================================== */
+const HK_KEYS = ['rahim_account','sohag_account','second_account','draft_account'];
+const HK_MAX_SNAP = 10;
+const HK_SNAP_GAP = 5*60*1000;
+let hkReady = false, hkT1 = null, hkT2 = null, hkRecoveredNote = '';
+
+function hkHash(s){let h=2166136261;for(let i=0;i<s.length;i++){h^=s.charCodeAt(i);h=Math.imul(h,16777619);}return (h>>>0).toString(16);}
+function hkValidJson(v){if(typeof v!=='string')return false;try{JSON.parse(v);return true;}catch(e){return false;}}
+function hkCollect(){const d={};HK_KEYS.forEach(k=>{d[k]=localGet(k);});return d;}
+function hkHasData(d){return !!d && HK_KEYS.some(k=>hkValidJson(d[k]));}
+function hkSig(d){return hkHash(HK_KEYS.map(k=>d[k]||'').join('\u0001'));}
+function hkBn(n){try{return new Intl.NumberFormat('bn-BD').format(n);}catch(e){return String(n);}}
+function hkFmtTime(iso){
+  if(!iso) return 'নেই';
+  try{return new Intl.DateTimeFormat('bn-BD',{day:'numeric',month:'short',hour:'numeric',minute:'2-digit'}).format(new Date(iso));}catch(e){return iso;}
+}
+function hkSummary(d){
+  try{
+    const r = JSON.parse(d.rahim_account||'{}'), s = JSON.parse(d.second_account||'{}');
+    return 'রহিম ব্যালেন্স '+fmt(+r.current||0)+' • সকল খাত '+fmt(+s.total||0);
+  }catch(e){return '';}
+}
+function hkFlushUi(){ try{saveRahim();saveSohag();saveSecond();saveDraft();}catch(e){} }
+
+/* ---- ধাপ ১: স্ন্যাপশট ---- */
+function hkGetSnaps(){try{const a=JSON.parse(__ls.getItem('hk_snapshots')||'[]');return Array.isArray(a)?a:[];}catch(e){return [];}}
+function hkSetSnaps(a){
+  let list=a;
+  for(let i=0;i<3;i++){
+    try{__ls.setItem('hk_snapshots',JSON.stringify(list));return true;}
+    catch(e){list=list.slice(0,Math.max(1,Math.floor(list.length/2)));}
+  }
+  return false;
+}
+function hkPrune(snaps){
+  const keep=snaps.slice(0,HK_MAX_SNAP);
+  const seen=new Set(keep.map(s=>new Date(s.t).toDateString()));
+  let extra=0;
+  for(const s of snaps.slice(HK_MAX_SNAP)){
+    const day=new Date(s.t).toDateString();
+    if(!seen.has(day) && extra<7){seen.add(day);keep.push(s);extra++;}
+  }
+  return keep;
+}
+function hkSnapshotNow(reason, opts){
+  opts=opts||{};
+  const d=hkCollect(); if(!hkHasData(d)) return false;
+  const snaps=hkGetSnaps(); const sig=hkSig(d); const now=new Date();
+  if(snaps[0] && snaps[0].sig===sig){
+    if(opts.force){snaps[0].t=now.toISOString();snaps[0].reason=reason;hkSetSnaps(snaps);}
+    return false;
+  }
+  if(!opts.force && snaps[0] && now-new Date(snaps[0].t)<HK_SNAP_GAP) return false;
+  snaps.unshift({t:now.toISOString(),reason:reason,sig:sig,data:d});
+  hkSetSnaps(hkPrune(snaps));
+  return true;
+}
+
+/* ---- ধাপ ২: IndexedDB মিরর ---- */
+function hkIdb(){
+  return new Promise((res,rej)=>{
+    if(!window.indexedDB){rej(new Error('no idb'));return;}
+    const to=setTimeout(()=>rej(new Error('idb timeout')),3000);
+    try{
+      const r=indexedDB.open('hisab-khata-db',1);
+      r.onupgradeneeded=()=>{ if(!r.result.objectStoreNames.contains('kv')) r.result.createObjectStore('kv'); };
+      r.onsuccess=()=>{clearTimeout(to);res(r.result);};
+      r.onerror=()=>{clearTimeout(to);rej(r.error);};
+    }catch(e){clearTimeout(to);rej(e);}
+  });
+}
+async function hkIdbPut(key,val){
+  const db=await hkIdb();
+  return new Promise((res,rej)=>{
+    const tx=db.transaction('kv','readwrite');
+    tx.objectStore('kv').put(val,key);
+    tx.oncomplete=()=>{db.close();res(true);};
+    tx.onerror=()=>{db.close();rej(tx.error);};
+    tx.onabort=()=>{db.close();rej(tx.error);};
+  });
+}
+async function hkIdbGet(key){
+  const db=await hkIdb();
+  return new Promise((res,rej)=>{
+    const rq=db.transaction('kv','readonly').objectStore('kv').get(key);
+    rq.onsuccess=()=>{db.close();res(rq.result||null);};
+    rq.onerror=()=>{db.close();rej(rq.error);};
+  });
+}
+async function hkMirrorNow(){
+  const d=hkCollect(); if(!hkHasData(d)) return false;
+  try{
+    const sig=hkSig(d);
+    const cur=await hkIdbGet('mirror');
+    if(cur && cur.sig===sig){hkRenderStatus();return true;}
+    if(cur && hkHasData(cur.data) && Date.now()-new Date(cur.t).getTime()>10*60*1000){
+      await hkIdbPut('mirror_prev',cur);
+    }
+    await hkIdbPut('mirror',{t:new Date().toISOString(),sig:sig,data:d});
+    hkRenderStatus();
+    return true;
+  }catch(e){return false;}
+}
+
+/* ---- ধাপ ৩: ফাইল ব্যাকআপ ---- */
+function hkBuildBackup(){
+  const d=hkCollect();
+  return {
+    app:'হিসাব খাতা', version:2, exported_at:new Date().toISOString(),
+    rahim_account:d.rahim_account, sohag_account:d.sohag_account,
+    second_account:d.second_account, draft_account:d.draft_account,
+    checksum:hkSig(d)
+  };
+}
+function hkMarkFile(){
+  try{__ls.setItem('hk_last_file',new Date().toISOString());}catch(e){}
+  hkRenderStatus();
+}
+
+/* ---- অটো রিকভারি (পেজ খোলার সময়) ---- */
+async function hkAutoRecover(){
+  try{
+    const d=hkCollect();
+    const missing=HK_KEYS.filter(k=>!hkValidJson(d[k]));
+    if(!missing.length) return;
+    let src=null,label='';
+    try{
+      const m=await hkIdbGet('mirror');
+      if(m && hkHasData(m.data)){src=m.data;label='ব্রাউজার মিরর';}
+    }catch(e){}
+    if(!src){
+      const s=hkGetSnaps().find(x=>hkHasData(x.data));
+      if(s){src=s.data;label='স্ন্যাপশট';}
+    }
+    if(!src) return;
+    let n=0;
+    missing.forEach(k=>{ if(hkValidJson(src[k])){ __ls.setItem(k,src[k]); n++; } });
+    if(n) hkRecoveredNote='⚠ ডেটা হারানো/নষ্ট ছিল — '+label+' থেকে স্বয়ংক্রিয়ভাবে ফিরিয়ে আনা হয়েছে';
+  }catch(e){}
+}
+
+/* ---- পরিবর্তন ধরা ও সময়মতো ব্যাকআপ ---- */
+function hkOnChange(){
+  if(!hkReady) return;
+  try{__ls.setItem('hk_saved_at',new Date().toISOString());}catch(e){}
+  clearTimeout(hkT1); hkT1=setTimeout(hkMirrorNow,1500);
+  clearTimeout(hkT2); hkT2=setTimeout(()=>{hkSnapshotNow('অটো');hkRenderStatus();},30000);
+}
+function hkFlush(){
+  if(!hkReady) return;
+  hkSnapshotNow('অটো');
+  hkMirrorNow();
+}
+document.addEventListener('visibilitychange',()=>{ if(document.visibilityState==='hidden') hkFlush(); });
+window.addEventListener('pagehide',hkFlush);
+
+/* ---- রিস্টোর ---- */
+async function hkApplyData(d){
+  hkReady=false;
+  hkFlushUi();
+  hkSnapshotNow('রিস্টোরের আগের অবস্থা',{force:true});
+  HK_KEYS.forEach(k=>{ if(hkValidJson(d[k])) localSet(k,d[k]); });
+  try{await hkMirrorNow();}catch(e){}
+  showToast('পুনরুদ্ধার সম্পন্ন, পাতা রিলোড হচ্ছে...');
+  setTimeout(()=>location.reload(),900);
+}
+function hkRestoreSnap(i){
+  const s=hkGetSnaps()[i];
+  if(!s||!hkHasData(s.data)){alert('এই স্ন্যাপশটে ডেটা নেই');return;}
+  if(!confirm('বর্তমান হিসাব বদলে '+hkFmtTime(s.t)+' এর স্ন্যাপশট বসানো হবে।\n(বর্তমান অবস্থাও আগে স্ন্যাপশট হিসেবে রাখা হবে।) চালিয়ে যাবেন?')) return;
+  hkApplyData(s.data);
+}
+async function hkRestoreMirror(slot){
+  let m=null; try{m=await hkIdbGet(slot);}catch(e){}
+  if(!m||!hkHasData(m.data)){alert('এই কপিতে ডেটা নেই');return;}
+  if(!confirm('বর্তমান হিসাব বদলে '+hkFmtTime(m.t)+' এর মিরর কপি বসানো হবে।\n(বর্তমান অবস্থাও আগে স্ন্যাপশট হিসেবে রাখা হবে।) চালিয়ে যাবেন?')) return;
+  hkApplyData(m.data);
+}
+function restoreBackup(event){
+  const input=event.target;
+  const file=input.files && input.files[0];
+  if(!file) return;
+  const reader=new FileReader();
+  reader.onload=function(e){
+    try{
+      const data=JSON.parse(e.target.result);
+      const d={}; HK_KEYS.forEach(k=>{d[k]=data[k];});
+      if(!hkHasData(d)){alert('এই ফাইলটি সঠিক ব্যাকআপ ফাইল নয়।');input.value='';return;}
+      if(data.checksum && data.checksum!==hkSig(d)){
+        if(!confirm('সতর্কতা: ফাইলের চেকসাম মেলেনি — ফাইলটি পরিবর্তিত বা নষ্ট হতে পারে। তবুও চালিয়ে যাবেন?')){input.value='';return;}
+      }
+      if(!confirm('বর্তমান সব হিসাব মুছে এই ব্যাকআপ ফাইলের ডেটা বসানো হবে। (বর্তমান অবস্থা আগে স্ন্যাপশট হিসেবে রাখা হবে।) চালিয়ে যাবেন?')){input.value='';return;}
+      hkApplyData(d);
+    }catch(err){
+      alert('এই ফাইলটি সঠিক ব্যাকআপ ফাইল নয়।');
+    }
+    input.value='';
+  };
+  reader.readAsText(file);
+}
+
+/* ---- ইউআই ---- */
+async function hkRenderStatus(){
+  const el=document.getElementById('hk-status'); if(!el) return;
+  const snaps=hkGetSnaps(); let mir=null;
+  try{mir=await hkIdbGet('mirror');}catch(e){}
+  const lf=__ls.getItem('hk_last_file');
+  const old=!lf || (Date.now()-new Date(lf).getTime()>86400000);
+  el.innerHTML='ধাপ ১ স্ন্যাপশট: <b>'+hkBn(snaps.length)+'টি</b> • ধাপ ২ মিরর: <b>'+(mir?hkFmtTime(mir.t):'নেই')+
+    '</b> • ধাপ ৩ ফাইল: <b class="'+(old?'hk-warn':'')+'">'+(lf?hkFmtTime(lf):'এখনো নেই')+'</b>'+
+    (old?' <span class="hk-warn">— ⚠ ফাইল ব্যাকআপ নিন</span>':'');
+}
+function hkMirrorItem(m,slot,title){
+  if(!m||!hkHasData(m.data)) return '<div class="hk-item"><div><b>'+title+'</b><small>এখনো কোনো কপি নেই</small></div></div>';
+  return '<div class="hk-item"><div><b>'+title+'</b> <span class="hk-tag">'+hkFmtTime(m.t)+'</span><small>'+hkSummary(m.data)+'</small></div>'+
+    '<button type="button" class="hk-btn" onclick="hkRestoreMirror(\''+slot+'\')">পুনরুদ্ধার</button></div>';
+}
+async function hkRenderModal(){
+  const body=document.getElementById('hk-modal-body'); if(!body) return;
+  const snaps=hkGetSnaps();
+  let mir=null,prev=null;
+  try{mir=await hkIdbGet('mirror');prev=await hkIdbGet('mirror_prev');}catch(e){}
+  const lf=__ls.getItem('hk_last_file');
+  let h='<div class="hk-step"><div class="hk-step-title"><span class="hk-num">১</span>অটো স্ন্যাপশট<small>এই ব্রাউজারে • সর্বশেষ ১০টি + প্রতিদিনের একটি</small></div>'+
+    '<div class="hk-actions"><button type="button" class="hk-btn" onclick="hkManualSnap()">📸 এখনই স্ন্যাপশট নিন</button></div>';
+  if(!snaps.length) h+='<div class="hk-empty">এখনো কোনো স্ন্যাপশট নেই</div>';
+  else{
+    h+='<div class="hk-list">';
+    snaps.forEach((s,i)=>{
+      h+='<div class="hk-item"><div><b>'+hkFmtTime(s.t)+'</b> <span class="hk-tag">'+s.reason+'</span><small>'+hkSummary(s.data)+'</small></div>'+
+         '<button type="button" class="hk-btn" onclick="hkRestoreSnap('+i+')">পুনরুদ্ধার</button></div>';
+    });
+    h+='</div>';
+  }
+  h+='</div>';
+  h+='<div class="hk-step"><div class="hk-step-title"><span class="hk-num">২</span>মিরর কপি<small>আলাদা ব্রাউজার স্টোরেজে (IndexedDB)</small></div>'+
+     hkMirrorItem(mir,'mirror','সর্বশেষ কপি')+hkMirrorItem(prev,'mirror_prev','আগের কপি')+
+     '<div class="hk-tip">মূল ডেটা মুছে/নষ্ট হলে পেজ খোলার সময় এই কপি থেকে নিজে নিজেই ফিরে আসে।</div></div>';
+  h+='<div class="hk-step"><div class="hk-step-title"><span class="hk-num">৩</span>ফাইল ব্যাকআপ<small>সবচেয়ে নিরাপদ — ব্রাউজারের বাইরে</small></div>'+
+     '<div class="hk-actions">'+
+     '<button type="button" class="hk-btn" onclick="downloadBackup();hkRenderModal()">⬇ JSON ব্যাকআপ</button>'+
+     '<button type="button" class="hk-btn" onclick="saveWithData()">⬇ ডেটাসহ HTML ফাইল</button>'+
+     '<label class="hk-btn">⬆ ফাইল থেকে পুনরুদ্ধার<input type="file" accept="application/json,.json" onchange="restoreBackup(event)"></label>'+
+     '</div><div class="hk-tip">সর্বশেষ ফাইল ব্যাকআপ: <b>'+(lf?hkFmtTime(lf):'এখনো নেই')+'</b>। দিনের শেষে একবার ডাউনলোড করে ফোন/গুগল ড্রাইভে রাখুন।</div></div>';
+  body.innerHTML=h;
+}
+function hkOpen(){const m=document.getElementById('hk-modal');if(m)m.classList.add('open');hkRenderModal();}
+function hkClose(){const m=document.getElementById('hk-modal');if(m)m.classList.remove('open');}
+async function hkManualSnap(){
+  hkFlushUi();
+  hkSnapshotNow('ম্যানুয়াল',{force:true});
+  await hkMirrorNow();
+  hkRenderModal(); hkRenderStatus();
+  showToast('স্ন্যাপশট নেওয়া হয়েছে');
+}
+
+/* ---------- ধাপ ৪: Google Drive অটো সিঙ্ক ---------- */
+const GD_CLIENT_ID = '';   /* চাইলে এখানে আপনার Client ID বসাতে পারেন; খালি থাকলে অ্যাপ প্রথমবার জিজ্ঞেস করবে */
+const GD_FILE = 'hisab-khata-data.json';
+const GD_SCOPE = 'https://www.googleapis.com/auth/drive.appdata';
+let gdToken = null, gdExp = 0, gdClient = null, gdTimer = null, gdBusy = false, gdFileId = null, gdPending = null, gdArmed = false;
+
+function gdClientId(){ return (GD_CLIENT_ID || localGet('gd_client_id') || '').trim(); }
+function gdConnected(){ return localGet('gd_connected') === '1'; }
+function gdSetStatus(msg, bad){
+  const el = document.getElementById('gd-status');
+  if(el) el.innerHTML = msg ? '☁ Drive: <b class="'+(bad?'hk-warn':'')+'">'+msg+'</b>' : '';
+  const off = document.getElementById('gd-off'); if(off) off.style.display = gdConnected() ? 'inline-flex' : 'none';
+  const b = document.getElementById('gd-btn'); if(b) b.textContent = gdConnected() ? '☁ এখনই সিঙ্ক' : '☁ Google Drive সিঙ্ক';
+}
+function gdInit(){
+  if(gdClient) return true;
+  if(!(window.google && google.accounts && google.accounts.oauth2)) return false;
+  const id = gdClientId(); if(!id) return false;
+  gdClient = google.accounts.oauth2.initTokenClient({
+    client_id:id, scope:GD_SCOPE,
+    callback:function(r){
+      const p = gdPending; gdPending = null; if(!p) return;
+      if(r.error){ p.rej(new Error(r.error)); return; }
+      gdToken = r.access_token; gdExp = Date.now() + ((+r.expires_in || 3600) - 60)*1000; p.res(gdToken);
+    },
+    error_callback:function(e){
+      const p = gdPending; gdPending = null; if(p) p.rej(new Error((e && e.type) || 'popup'));
+    }
+  });
+  return true;
+}
+function gdRequestToken(){
+  return new Promise(function(res, rej){
+    if(!gdInit()){ rej(new Error('noinit')); return; }
+    gdPending = {res:res, rej:rej};
+    gdClient.requestAccessToken({prompt:''});
+  });
+}
+async function gdApi(url, opts){
+  opts = opts || {};
+  opts.headers = Object.assign({Authorization:'Bearer '+gdToken}, opts.headers || {});
+  const r = await fetch(url, opts);
+  if(r.status === 401 || r.status === 403){ gdToken = null; gdExp = 0; throw new Error('auth'); }
+  if(!r.ok) throw new Error('http '+r.status);
+  return r;
+}
+async function gdFind(){
+  const q = encodeURIComponent("name='"+GD_FILE+"'");
+  const r = await gdApi('https://www.googleapis.com/drive/v3/files?spaces=appDataFolder&q='+q+'&fields=files(id)');
+  const j = await r.json();
+  return (j.files && j.files[0]) ? j.files[0].id : null;
+}
+async function gdDownload(id){
+  const r = await gdApi('https://www.googleapis.com/drive/v3/files/'+id+'?alt=media');
+  return r.json();
+}
+async function gdUpload(payload){
+  const meta = gdFileId ? {name:GD_FILE} : {name:GD_FILE, parents:['appDataFolder']};
+  const b = 'hkboundary7391';
+  const body = '--'+b+'\r\nContent-Type: application/json; charset=UTF-8\r\n\r\n'+JSON.stringify(meta)+
+               '\r\n--'+b+'\r\nContent-Type: application/json\r\n\r\n'+JSON.stringify(payload)+'\r\n--'+b+'--';
+  const url = gdFileId
+    ? 'https://www.googleapis.com/upload/drive/v3/files/'+gdFileId+'?uploadType=multipart&fields=id'
+    : 'https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart&fields=id';
+  const r = await gdApi(url, {method: gdFileId ? 'PATCH' : 'POST', headers:{'Content-Type':'multipart/related; boundary='+b}, body:body});
+  const j = await r.json();
+  gdFileId = j.id;
+}
+function gdPayload(local){
+  return {app:'হিসাব খাতা', saved_at:new Date().toISOString(), active_date:localGet('active_date'), data:local};
+}
+function gdApplyRemote(remote){
+  hkReady = false;
+  hkSnapshotNow('Drive থেকে নেওয়ার আগের অবস্থা', {force:true});
+  HK_KEYS.forEach(function(k){ if(hkValidJson(remote.data[k])) __ls.setItem(k, remote.data[k]); });
+  if(remote.active_date) __ls.setItem('active_date', remote.active_date);
+  __ls.setItem('gd_sig', hkSig(hkCollect()));
+  showToast('Drive থেকে সর্বশেষ ডেটা আনা হয়েছে, রিলোড হচ্ছে...');
+  setTimeout(function(){ location.reload(); }, 900);
+}
+async function gdSync(manual){
+  if(gdBusy) return;
+  gdBusy = true;
+  try{
+    if(!gdToken || Date.now() > gdExp){
+      gdSetStatus('অনুমতি নেওয়া হচ্ছে...');
+      await gdRequestToken();
+    }
+    gdSetStatus('সিঙ্ক হচ্ছে...');
+    const local = hkCollect(), sig = hkSig(local), localHas = hkHasData(local);
+    if(!gdFileId) gdFileId = await gdFind();
+    const remote = gdFileId ? await gdDownload(gdFileId) : null;
+    const rdata = (remote && remote.data) ? remote.data : null;
+    const remoteHas = !!rdata && hkHasData(rdata);
+    const base = localGet('gd_sig') || '';
+    let act = 'none';
+    if(!remoteHas){ act = localHas ? 'push' : 'none'; }
+    else{
+      const rsig = hkSig(rdata);
+      if(rsig === sig) act = 'same';
+      else if(!localHas) act = 'pull';
+      else if(base && sig === base) act = 'pull';
+      else if(base && rsig === base) act = 'push';
+      else act = 'ask';
+    }
+    if(act === 'ask'){
+      const when = remote.saved_at ? hkFmtTime(remote.saved_at) : '';
+      act = confirm('Drive-এ (সংরক্ষণ: '+when+') এই ডিভাইসের থেকে আলাদা হিসাব আছে।\n\nOK = Drive-এর হিসাব নিন (এই ডিভাইসের বর্তমান অবস্থা আগে স্ন্যাপশটে রাখা হবে)\nCancel = এই ডিভাইসের হিসাব Drive-এ রাখুন (Drive-এরটা বদলে যাবে)') ? 'pull' : 'push';
+    }
+    if(act === 'pull'){ gdApplyRemote(remote); return; }
+    if(act === 'push') await gdUpload(gdPayload(local));
+    if(act !== 'none') __ls.setItem('gd_sig', sig);
+    gdSetStatus('সিঙ্ক সম্পন্ন • '+hkFmtTime(new Date().toISOString()));
+    if(manual) showToast('Google Drive-এ সিঙ্ক সম্পন্ন');
+  }catch(e){
+    const m = (e && e.message) || '';
+    if(m === 'noinit'){
+      gdSetStatus(gdClientId() ? 'Google লোড হয়নি — ইন্টারনেট দেখে আবার চেষ্টা করুন' : 'Client ID বসানো হয়নি', true);
+    }else if(m === 'auth' || m.indexOf('popup') > -1 || m.indexOf('access_denied') > -1 || m.indexOf('interaction') > -1){
+      gdSetStatus('অনুমতি লাগবে — স্ক্রিনে একবার ট্যাপ করুন', true);
+      gdArm();
+    }else{
+      gdSetStatus('সিঙ্ক হয়নি ('+m+') — পরে আবার চেষ্টা করুন', true);
+    }
+  }finally{
+    gdBusy = false;
+  }
+}
+function gdArm(){
+  if(gdArmed) return;
+  gdArmed = true;
+  const h = function(){
+    gdArmed = false;
+    document.removeEventListener('pointerup', h, true);
+    document.removeEventListener('keydown', h, true);
+    if(gdConnected()) gdSync(false);
+  };
+  document.addEventListener('pointerup', h, true);
+  document.addEventListener('keydown', h, true);
+}
+function gdChanged(){
+  if(!hkReady || gdBusy || !gdConnected()) return;
+  clearTimeout(gdTimer);
+  gdTimer = setTimeout(function(){
+    if(gdToken && Date.now() < gdExp) gdSync(false);
+    else{ gdSetStatus('পরিবর্তন সিঙ্কের অপেক্ষায় — স্ক্রিনে একবার ট্যাপ করুন', true); gdArm(); }
+  }, 4000);
+}
+function gdConnectClick(){
+  if(!gdClientId()){
+    const id = prompt('আপনার Google Client ID বসান (…apps.googleusercontent.com):');
+    if(!id) return;
+    __ls.setItem('gd_client_id', id.trim());
+  }
+  __ls.setItem('gd_connected', '1');
+  gdSetStatus('সংযোগ হচ্ছে...');
+  gdSync(true);
+}
+function gdDisconnect(){
+  if(!confirm('এই ডিভাইসে Drive সিঙ্ক বন্ধ করবেন? (Drive-এ রাখা ডেটা মুছবে না)')) return;
+  try{ if(gdToken && window.google && google.accounts && google.accounts.oauth2) google.accounts.oauth2.revoke(gdToken, function(){}); }catch(e){}
+  gdToken = null; gdExp = 0;
+  __ls.setItem('gd_connected', '0');
+  gdSetStatus('সংযুক্ত নয়');
+}
+function gdBoot(){
+  if(gdConnected()){ gdSetStatus('সংযুক্ত — স্ক্রিনে প্রথম ট্যাপে সিঙ্ক হবে'); gdArm(); }
+  else gdSetStatus('সংযুক্ত নয়');
+}
+
+/* ---- চালু করা ---- */
+(async function hkInit(){
+  await hkAutoRecover();
+  setDates();
+  await loadAll();
+  await loadDraft();
+  hkReady=true;
+  hkOnChange();
+  hkRenderStatus();
+  gdBoot();
+  if(hkRecoveredNote) showToast(hkRecoveredNote);
+  try{ if(navigator.storage && navigator.storage.persist) navigator.storage.persist(); }catch(e){}
+})();
+</script>
+
+<script>
+async function saveWithData(){
+  try{
+    await saveAllData();
+    var data={};
+    ['rahim_account','sohag_account','second_account','draft_account'].forEach(function(k){data[k]=localGet(k);});
+    var at=new Date().toISOString();
+    var clone=document.documentElement.cloneNode(true);
+    var seed=clone.querySelector('#seed-data');
+    var pre=seed.textContent.slice(0,seed.textContent.indexOf('try{var SEED_AT'));var code=pre+'try{var SEED_AT='+JSON.stringify(at)+';var S='+JSON.stringify(data)+';'
+      +"var cur=__ls.getItem('seed_at')||'';"
+      +"if(SEED_AT>cur){for(var k in S){if(S[k]!==null&&S[k]!==undefined)__ls.setItem(k,S[k]);}__ls.setItem('seed_at',SEED_AT);}"
+      +'}catch(e){}';
+    seed.textContent=code.replace(/<\//g,'<\\/');
+    var mm=clone.querySelector('#hk-modal');if(mm)mm.classList.remove('open');
+    ['draft-people','rahim-date','second-date','sohag-date','draft-date','hk-modal-body','hk-status','gd-status'].forEach(function(id){var e=clone.querySelector('#'+id);if(e)e.innerHTML='';});
+    var t=clone.querySelector('#toast');if(t){t.textContent='';t.className='toast';}
+    clone.querySelectorAll('.tab-panel,.tab-btn').forEach(function(e){e.classList.remove('active');});
+    var a1=clone.querySelector('#tab-main'),a2=clone.querySelector('#tab-btn-main');
+    if(a1)a1.classList.add('active');if(a2)a2.classList.add('active');
+    var html='<!DOCTYPE html>\n'+clone.outerHTML;
+    var blob=new Blob([html],{type:'text/html'});
+    var url=URL.createObjectURL(blob);
+    var a=document.createElement('a');
+    a.href=url;a.download='hisab-khata-'+at.slice(0,10)+'.html';
+    document.body.appendChild(a);a.click();document.body.removeChild(a);
+    setTimeout(function(){URL.revokeObjectURL(url)},2000);
+    hkMarkFile();
+    showToast('ডেটাসহ নতুন ফাইল ডাউনলোড হয়েছে');
+  }catch(e){console.error(e);showToast('ফাইল তৈরি করা যায়নি');}
+}
+</script>
+
+
+</body></html>
