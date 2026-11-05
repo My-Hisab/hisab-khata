@@ -65,19 +65,34 @@
   }
 
   /* তিনটি হিসাবকে আলাদা রঙে চিহ্নিত করা */
-  #card-rahim{ border-top:4px solid var(--acc-rahim); max-width:480px; margin:0 auto; }
+  #card-rahim{ max-width:480px; margin:0 auto; }
+  #rahim-shot{ display:flex; flex-direction:column; gap:12px; padding:12px; background:var(--paper); }
+  .rbox{ border:2px solid; border-radius:10px; padding:14px 16px; }
+  .rbox-1{ border-color:var(--acc-rahim); background:#EEF3F9; }
+  .rbox-2{ border-color:#A6493B; background:#FBF1EE; }
+  .rbox-3{ border-color:var(--brand); background:#EEF6F2; }
+  .rbox-2 .group-label{ color:#A6493B; margin-top:0; }
+  .rbox-2 #r-hidden-bar{ border-top-color:#A6493B55; }
+  .rbox-2 .r-hide-btn{ border-color:#A6493B55; }
+  .rbox-2 .hb-chip{ border-color:#A6493B !important; color:#A6493B !important; }
+  .rbox-3 .result-row{ margin:0; padding:0; border-top:none; }
+  .rbox-3 .result-row .rlabel{ color:var(--brand) !important; }
+  .rbox-3 .result-row .rvalue{ font-size:24px; }
+  #card-rahim .rbox-1 .result-row{ border-top-color:var(--acc-rahim); }
+  #card-rahim .rbox .row input[type=number]{ background:#fff; }
+  #rahim-actions{ margin-top:4px; padding:0 12px; }
   #card-rahim .ledger-head{ border-bottom-color:var(--acc-rahim); }
   #card-rahim .ledger-head h2{ color:var(--acc-rahim); }
   #card-rahim .result-row{ border-top-color:var(--acc-rahim); }
   #card-rahim .result-row .rlabel{ color:var(--acc-rahim); }
 
-  #card-second{ border-top:4px solid var(--acc-draft); }
+  #card-second{ }
   #card-second .ledger-head{ border-bottom-color:var(--acc-draft); }
   #card-second .ledger-head h2{ color:var(--acc-draft); }
   #card-second .result-row{ border-top-color:var(--acc-draft); }
   #card-second .result-row .rlabel{ color:var(--acc-draft); }
 
-  #card-sohag{ border-top:4px solid var(--acc-sohag); max-width:480px; margin:0 auto; }
+  #card-sohag{ max-width:480px; margin:0 auto; }
   #card-sohag .ledger-head{ border-bottom-color:var(--acc-sohag); }
   #card-sohag .ledger-head h2{ color:var(--acc-sohag); }
   #card-sohag .result-row{ border-top-color:var(--acc-sohag); }
@@ -115,6 +130,12 @@
     flex:1;
     color:var(--ink);
   }
+  .r-hide-btn{background:transparent;border:1px solid var(--rule);color:var(--ink-soft);border-radius:8px;width:32px;height:32px;display:inline-flex;align-items:center;justify-content:center;padding:0;cursor:pointer;flex:none;}
+  .r-hide-btn:active{background:var(--rule);}
+  #r-hidden-bar{margin-top:8px;padding:8px 0 2px;border-top:1px dashed var(--rule);}
+  #r-hidden-bar .hb-title{font-size:12.5px;color:var(--ink-soft);margin-bottom:6px;}
+  #r-hidden-bar .hb-chip{display:inline-block;margin:0 6px 6px 0;padding:5px 11px;border:1px solid var(--acc-rahim);color:var(--acc-rahim);background:transparent;border-radius:999px;font-size:13px;font-family:inherit;cursor:pointer;}
+  .r-exp-row.r-hidden{display:none;}
   .row .sign{
     font-size:13px;
     color:var(--ink-soft);
@@ -574,9 +595,64 @@
 .hk-item small{display:block;color:var(--ink-soft);font-size:12px}
 .hk-tag{font-size:11px;background:#EFEDE6;border-radius:10px;padding:1px 8px;color:var(--ink-soft)}
 .hk-empty,.hk-tip{font-size:12.5px;color:var(--ink-soft);line-height:1.6}
+
+/* ---------- ব্যাকগ্রাউন্ড অ্যানিমেশন ---------- */
+#bg-anim{position:fixed;inset:0;width:100%;height:100%;z-index:-1;pointer-events:none;}
+
+/* ---------- বক্স সিস্টেম (বাকি হিসাবগুলো) ---------- */
+#sohag-shot,#second-shot,#final-shot{display:flex;flex-direction:column;gap:12px;padding:12px;background:var(--paper);}
+.rbox .group-label{margin-top:0;}
+/* সোহাগ */
+.rb-s1{border-color:#8C3E5A;background:#FBF0F4;}
+.rb-s2{border-color:#B98F3E;background:#FBF6EA;}
+.rb-s2 .group-label{color:#B98F3E;}
+.rb-s3{border-color:#2E6350;background:#EEF6F2;}
+.rb-s3 .result-row{margin:0;padding:0;border-top:none;}
+.rb-s3 .result-row .rlabel{color:#2E6350 !important;}
+.rb-s3 .result-row .rvalue{font-size:24px;}
+/* ব্যালেন্স হিসাব */
+.rb-head{border-color:var(--acc-draft);background:#FBF6EA;}
+.rb-head .ledger-head{margin:0;border-bottom:none;padding-bottom:0;}
+.rb-invest{border-color:var(--cat-invest);background:#F4F0FB;}
+.rb-bkash{border-color:var(--cat-bkash);background:#FDF0F6;}
+.rb-bank{border-color:var(--cat-bank);background:#EDF4FA;}
+.rb-cash{border-color:var(--cat-cash);background:#EEF6F2;}
+.rb-dhar{border-color:var(--cat-dhar);background:#FCF2EA;}
+.rb-total{border-color:var(--brand);background:#EEF6F2;}
+.rb-total .result-row{margin-top:0;border-top:none;padding-top:0;}
+.rbox .category-total{background:#fff;}
+#second-shot .rbox .row input[type=number],#sohag-shot .rbox .row input[type=number]{background:#fff;}
+/* চূড়ান্ত হিসাব */
+#card-final{background:none;padding:0;max-width:620px;margin:0 auto;}
+#final-shot{text-align:center;}
+#final-shot h3{color:var(--brand);opacity:1;font-size:17px;}
+#card-final .calc-lines{display:flex;flex-direction:column;gap:12px;max-width:none;text-align:left;}
+.fbox{border-radius:10px;padding:8px 14px;color:#fff;}
+.fb-1{background:#2E5A8C;}
+.fb-2{background:#B85C1E;}
+.fb-3{background:#1F4B3F;}
+.fbox .calc-line:last-child{border-bottom:none;}
+#card-final .calc-line-result{background:#fff;color:var(--ink);border-color:#fff;}
+/* বিবরণী হিসাব */
+.cat-block{border:2px solid;border-radius:10px;padding:10px 12px;margin-bottom:12px;}
+.cat-block .cat-title{margin-top:0;}
+.cb-bkash{border-color:var(--cat-bkash);background:#FDF0F6;}.cb-bkash .cat-title{color:var(--cat-bkash);}
+.cb-banking{border-color:var(--cat-bank);background:#EDF4FA;}.cb-banking .cat-title{color:var(--cat-bank);}
+.cb-cash{border-color:var(--cat-cash);background:#EEF6F2;}.cb-cash .cat-title{color:var(--cat-cash);}
+.cat-block .entry-row input[type=number]{background:#fff;}
+.person-total-row{border:2px solid var(--brand);border-radius:10px;padding:10px 12px;background:#EEF6F2;margin-top:4px;}
+
+/* ব্যাকআপ ধাপ: চাপার আগে লাল, চাপার পর সবুজ */
+.backup-bar button.bk-step{color:#fff;border:1px solid transparent;transition:background .25s;}
+.backup-bar button.bk-red{background:#C0392B;border-color:#C0392B;}
+.backup-bar button.bk-green{background:#2E7D5B;border-color:#2E7D5B;}
+.backup-bar button.bk-green::after{content:" ✔";}
+#bk-note{margin:-4px auto 12px;font-weight:600;}
+.bk-ok{color:#2E7D5B;}
 </style>
 <style id="googleidentityservice_button_styles">.qJTHM{-moz-user-select:none;-webkit-user-select:none;-ms-user-select:none;color:#202124;direction:ltr;-webkit-touch-callout:none;font-family:Roboto-Regular,arial,sans-serif;-webkit-font-smoothing:antialiased;font-weight:400;margin:0;overflow:hidden;-webkit-text-size-adjust:100%}.ynRLnc{left:-9999px;position:absolute;top:-9999px}.L6cTce{display:none}.bltWBb{overflow-wrap:break-word;word-break:break-word}.hSRGPd{color:#1a73e8;cursor:pointer;font-weight:500;text-decoration:none}.Bz112c-W3lGp{height:16px;width:16px}.Bz112c-E3DyYd{height:20px;width:20px}.Bz112c-r9oPif{height:24px;width:24px}.Bz112c-u2z5K{height:36px;width:36px}.Bz112c-uaxL4e{border-radius:10px}.LgbsSe-Bz112c{display:block}.S9gUrf-YoZ4jf{border:none;margin:0;padding:0}.S9gUrf-YoZ4jf *{border:none;margin:0;padding:0}.fFW7wc-ibnC6b>.aZ2wEe>div{border-color:#4285f4}.P1ekSe-ZMv3u{-webkit-transition:height .2s linear;transition:height .2s linear}.P1ekSe-ZMv3u>div:first-child{background-color:#1a73e8!important;-webkit-transition:width .3s linear;transition:width .3s linear}.P1ekSe-ZMv3u>div:nth-child(2){background-image:-webkit-gradient(linear,left top,right top,from(rgba(255,255,255,.7)),to(rgba(255,255,255,.7))),-webkit-gradient(linear,left top,right top,from(#1a73e8),to(#1a73e8))!important;background-image:-webkit-linear-gradient(left,rgba(255,255,255,.7),rgba(255,255,255,.7)),-webkit-linear-gradient(left,#1a73e8,#1a73e8)!important;background-image:linear-gradient(90deg,rgba(255,255,255,.7),rgba(255,255,255,.7)),linear-gradient(90deg,#1a73e8,#1a73e8)!important}.P1ekSe-ZMv3u>div:nth-child(3){background-image:-webkit-gradient(linear,left top,right top,from(rgba(255,255,255,.7)),to(rgba(255,255,255,.7))),-webkit-gradient(linear,left top,right top,from(#1a73e8),to(#1a73e8))!important;background-image:-webkit-linear-gradient(left,rgba(255,255,255,.7),rgba(255,255,255,.7)),-webkit-linear-gradient(left,#1a73e8,#1a73e8)!important;background-image:linear-gradient(90deg,rgba(255,255,255,.7),rgba(255,255,255,.7)),linear-gradient(90deg,#1a73e8,#1a73e8)!important}.haAclf{display:inline-block}.nsm7Bb-HzV7m-LgbsSe{border-radius:4px;box-sizing:border-box;-webkit-transition:background-color .218s,border-color .218s;transition:background-color .218s,border-color .218s;-moz-user-select:none;-webkit-user-select:none;-ms-user-select:none;-webkit-appearance:none;background-color:#fff;background-image:none;border:1px solid #dadce0;color:#3c4043;cursor:pointer;font-family:Google Sans,arial,sans-serif;font-size:.875rem;height:40px;letter-spacing:.25px;outline:none;overflow:hidden;padding:0 12px;position:relative;text-align:center;vertical-align:middle;white-space:nowrap;width:auto}.nsm7Bb-HzV7m-LgbsSe.TzA9Ye-LgbsSe{font-size:14px}@media screen and (-ms-high-contrast:active){.nsm7Bb-HzV7m-LgbsSe{border:2px solid windowText;color:windowText}}@media screen and (preferes-contrast:more){.nsm7Bb-HzV7m-LgbsSe{color:#000}}.nsm7Bb-HzV7m-LgbsSe.pSzOP-SxQuSe{font-size:.875rem;height:32px;letter-spacing:.25px;padding:0 10px}.nsm7Bb-HzV7m-LgbsSe.pSzOP-SxQuSe.TzA9Ye-LgbsSe{font-size:14px}.nsm7Bb-HzV7m-LgbsSe.purZT-SxQuSe{font-size:.6875rem;height:20px;letter-spacing:.3px;padding:0 8px}.nsm7Bb-HzV7m-LgbsSe.purZT-SxQuSe.TzA9Ye-LgbsSe{font-size:11px}.nsm7Bb-HzV7m-LgbsSe.Bz112c-LgbsSe{padding:0;width:40px}.nsm7Bb-HzV7m-LgbsSe.Bz112c-LgbsSe.pSzOP-SxQuSe{width:32px}.nsm7Bb-HzV7m-LgbsSe.Bz112c-LgbsSe.purZT-SxQuSe{width:20px}.nsm7Bb-HzV7m-LgbsSe.JGcpL-RbRzK{border-radius:20px}.nsm7Bb-HzV7m-LgbsSe.JGcpL-RbRzK.pSzOP-SxQuSe{border-radius:16px}.nsm7Bb-HzV7m-LgbsSe.JGcpL-RbRzK.purZT-SxQuSe{border-radius:10px}.nsm7Bb-HzV7m-LgbsSe.i5vt6e-to915-Ia7Qfc{border:1px solid #8e918f;background-color:#131314;color:#e3e3e3}.nsm7Bb-HzV7m-LgbsSe.MFS4be-Ia7Qfc{border:none;color:#fff}.nsm7Bb-HzV7m-LgbsSe.MFS4be-v3pZbf-Ia7Qfc{background-color:#1a73e8}.nsm7Bb-HzV7m-LgbsSe.MFS4be-JaPV2b-Ia7Qfc{background-color:#202124;color:#e8eaed}@media screen and (prefers-contrast:more){.nsm7Bb-HzV7m-LgbsSe.MFS4be-JaPV2b-Ia7Qfc{color:#fff}}.nsm7Bb-HzV7m-LgbsSe .nsm7Bb-HzV7m-LgbsSe-Bz112c{height:18px;margin-right:8px;min-width:18px;width:18px}.nsm7Bb-HzV7m-LgbsSe.pSzOP-SxQuSe .nsm7Bb-HzV7m-LgbsSe-Bz112c{height:14px;min-width:14px;width:14px}.nsm7Bb-HzV7m-LgbsSe.purZT-SxQuSe .nsm7Bb-HzV7m-LgbsSe-Bz112c{height:10px;min-width:10px;width:10px}.nsm7Bb-HzV7m-LgbsSe.jVeSEe .nsm7Bb-HzV7m-LgbsSe-Bz112c{margin-left:8px;margin-right:-4px}.nsm7Bb-HzV7m-LgbsSe.Bz112c-LgbsSe .nsm7Bb-HzV7m-LgbsSe-Bz112c{margin:0;padding:10px}.nsm7Bb-HzV7m-LgbsSe.Bz112c-LgbsSe.pSzOP-SxQuSe .nsm7Bb-HzV7m-LgbsSe-Bz112c{padding:8px}.nsm7Bb-HzV7m-LgbsSe.Bz112c-LgbsSe.purZT-SxQuSe .nsm7Bb-HzV7m-LgbsSe-Bz112c{padding:4px}.nsm7Bb-HzV7m-LgbsSe .nsm7Bb-HzV7m-LgbsSe-Bz112c-haAclf{border-top-left-radius:3px;border-bottom-left-radius:3px;display:-webkit-box;display:-webkit-flex;display:flex;-webkit-box-pack:center;-webkit-justify-content:center;justify-content:center;-webkit-box-align:center;-webkit-align-items:center;align-items:center;background-color:#fff;height:36px;margin-left:-10px;margin-right:12px;min-width:36px;width:36px}.nsm7Bb-HzV7m-LgbsSe .nsm7Bb-HzV7m-LgbsSe-Bz112c-haAclf .nsm7Bb-HzV7m-LgbsSe-Bz112c,.nsm7Bb-HzV7m-LgbsSe.Bz112c-LgbsSe .nsm7Bb-HzV7m-LgbsSe-Bz112c-haAclf .nsm7Bb-HzV7m-LgbsSe-Bz112c{margin:0;padding:0}.nsm7Bb-HzV7m-LgbsSe.pSzOP-SxQuSe .nsm7Bb-HzV7m-LgbsSe-Bz112c-haAclf{height:28px;margin-left:-8px;margin-right:10px;min-width:28px;width:28px}.nsm7Bb-HzV7m-LgbsSe.purZT-SxQuSe .nsm7Bb-HzV7m-LgbsSe-Bz112c-haAclf{height:16px;margin-left:-6px;margin-right:8px;min-width:16px;width:16px}.nsm7Bb-HzV7m-LgbsSe.Bz112c-LgbsSe .nsm7Bb-HzV7m-LgbsSe-Bz112c-haAclf{border-radius:3px;margin-left:2px;margin-right:0;padding:0}.nsm7Bb-HzV7m-LgbsSe.JGcpL-RbRzK .nsm7Bb-HzV7m-LgbsSe-Bz112c-haAclf{border-radius:18px}.nsm7Bb-HzV7m-LgbsSe.pSzOP-SxQuSe.JGcpL-RbRzK .nsm7Bb-HzV7m-LgbsSe-Bz112c-haAclf{border-radius:14px}.nsm7Bb-HzV7m-LgbsSe.purZT-SxQuSe.JGcpL-RbRzK .nsm7Bb-HzV7m-LgbsSe-Bz112c-haAclf{border-radius:8px}.nsm7Bb-HzV7m-LgbsSe .nsm7Bb-HzV7m-LgbsSe-bN97Pc-sM5MNb{display:-webkit-box;display:-webkit-flex;display:flex;-webkit-align-items:center;-webkit-box-align:center;align-items:center;-webkit-flex-direction:row;-webkit-box-orient:horizontal;-webkit-box-direction:normal;flex-direction:row;-webkit-box-pack:justify;-webkit-justify-content:space-between;justify-content:space-between;-webkit-flex-wrap:nowrap;flex-wrap:nowrap;height:100%;position:relative;width:100%}.nsm7Bb-HzV7m-LgbsSe .oXtfBe-l4eHX{-webkit-box-pack:center;-webkit-justify-content:center;justify-content:center}.nsm7Bb-HzV7m-LgbsSe .nsm7Bb-HzV7m-LgbsSe-BPrWId{-webkit-flex-grow:1;-webkit-box-flex:1;flex-grow:1;font-family:Google Sans,arial,sans-serif;font-weight:500;overflow:hidden;text-overflow:ellipsis;vertical-align:top}.nsm7Bb-HzV7m-LgbsSe.purZT-SxQuSe .nsm7Bb-HzV7m-LgbsSe-BPrWId{font-weight:300}.nsm7Bb-HzV7m-LgbsSe .oXtfBe-l4eHX .nsm7Bb-HzV7m-LgbsSe-BPrWId{-webkit-flex-grow:0;-webkit-box-flex:0;flex-grow:0}.nsm7Bb-HzV7m-LgbsSe .nsm7Bb-HzV7m-LgbsSe-MJoBVe{-webkit-transition:background-color .218s;transition:background-color .218s;bottom:0;left:0;position:absolute;right:0;top:0}.nsm7Bb-HzV7m-LgbsSe:focus,.nsm7Bb-HzV7m-LgbsSe:hover{box-shadow:none;border-color:rgb(210,227,252);outline:none}.nsm7Bb-HzV7m-LgbsSe:focus-within{outline:2px solid #00639b;border-color:transparent}.nsm7Bb-HzV7m-LgbsSe:hover .nsm7Bb-HzV7m-LgbsSe-MJoBVe{background:rgba(66,133,244,.08)}.nsm7Bb-HzV7m-LgbsSe:active .nsm7Bb-HzV7m-LgbsSe-MJoBVe,.nsm7Bb-HzV7m-LgbsSe:focus .nsm7Bb-HzV7m-LgbsSe-MJoBVe{background:rgba(66,133,244,.1)}.nsm7Bb-HzV7m-LgbsSe.i5vt6e-to915-Ia7Qfc:hover .nsm7Bb-HzV7m-LgbsSe-MJoBVe{background:rgba(255,255,255,.08)}.nsm7Bb-HzV7m-LgbsSe.i5vt6e-to915-Ia7Qfc:active .nsm7Bb-HzV7m-LgbsSe-MJoBVe,.nsm7Bb-HzV7m-LgbsSe.i5vt6e-to915-Ia7Qfc:focus .nsm7Bb-HzV7m-LgbsSe-MJoBVe{background:rgba(255,255,255,.12)}.nsm7Bb-HzV7m-LgbsSe.MFS4be-Ia7Qfc:hover .nsm7Bb-HzV7m-LgbsSe-MJoBVe{background:rgba(255,255,255,.24)}.nsm7Bb-HzV7m-LgbsSe.MFS4be-Ia7Qfc:active .nsm7Bb-HzV7m-LgbsSe-MJoBVe,.nsm7Bb-HzV7m-LgbsSe.MFS4be-Ia7Qfc:focus .nsm7Bb-HzV7m-LgbsSe-MJoBVe{background:rgba(255,255,255,.32)}.nsm7Bb-HzV7m-LgbsSe .n1UuX-DkfjY{border-radius:50%;display:-webkit-box;display:-webkit-flex;display:flex;height:20px;margin-left:-4px;margin-right:8px;min-width:20px;width:20px}.nsm7Bb-HzV7m-LgbsSe.jVeSEe .nsm7Bb-HzV7m-LgbsSe-BPrWId{font-family:Roboto;font-size:12px;text-align:left}.nsm7Bb-HzV7m-LgbsSe.jVeSEe .nsm7Bb-HzV7m-LgbsSe-BPrWId .K4efff .fmcmS,.nsm7Bb-HzV7m-LgbsSe.jVeSEe .nsm7Bb-HzV7m-LgbsSe-BPrWId .ssJRIf{overflow:hidden;text-overflow:ellipsis}.nsm7Bb-HzV7m-LgbsSe.jVeSEe .nsm7Bb-HzV7m-LgbsSe-BPrWId .K4efff{display:-webkit-box;display:-webkit-flex;display:flex;-webkit-align-items:center;-webkit-box-align:center;align-items:center;color:#5f6368;fill:#5f6368;font-size:11px;font-weight:400}.nsm7Bb-HzV7m-LgbsSe.jVeSEe.i5vt6e-to915-Ia7Qfc .nsm7Bb-HzV7m-LgbsSe-BPrWId .K4efff{color:#c4c7c5;fill:#c4c7c5}.nsm7Bb-HzV7m-LgbsSe.jVeSEe.MFS4be-Ia7Qfc .nsm7Bb-HzV7m-LgbsSe-BPrWId .K4efff{color:#e8eaed;fill:#e8eaed}@media screen and (prefers-contrast:more){.nsm7Bb-HzV7m-LgbsSe.jVeSEe .nsm7Bb-HzV7m-LgbsSe-BPrWId .K4efff,.nsm7Bb-HzV7m-LgbsSe.jVeSEe.MFS4be-Ia7Qfc .nsm7Bb-HzV7m-LgbsSe-BPrWId .K4efff{color:#000;fill:#000}}.nsm7Bb-HzV7m-LgbsSe.jVeSEe .nsm7Bb-HzV7m-LgbsSe-BPrWId .K4efff .Bz112c{height:18px;margin:-3px -3px -3px 2px;min-width:18px;width:18px}.nsm7Bb-HzV7m-LgbsSe.jVeSEe .nsm7Bb-HzV7m-LgbsSe-Bz112c-haAclf{border-top-left-radius:0;border-bottom-left-radius:0;border-top-right-radius:3px;border-bottom-right-radius:3px;margin-left:12px;margin-right:-10px}.nsm7Bb-HzV7m-LgbsSe.jVeSEe.JGcpL-RbRzK .nsm7Bb-HzV7m-LgbsSe-Bz112c-haAclf{border-radius:18px}.L5Fo6c-sM5MNb{border:0;display:block;left:0;position:relative;top:0}.L5Fo6c-bF1uUb{border-radius:4px;bottom:0;cursor:pointer;left:0;position:absolute;right:0;top:0}.L5Fo6c-bF1uUb:focus{border:none;outline:none}sentinel{}</style></head>
 <body>
+<canvas id="bg-anim" aria-hidden="true"></canvas>
 <script id="seed-data">var __ls=(function(){try{var t='__t';localStorage.setItem(t,'1');localStorage.removeItem(t);return localStorage}catch(e){var m={};return{getItem:function(k){return Object.prototype.hasOwnProperty.call(m,k)?m[k]:null},setItem:function(k,v){m[k]=String(v)},removeItem:function(k){delete m[k]}}}})();try{var SEED_AT="2026-11-05T16:57:19.614Z";var S={"rahim_account":"{\"r-total\":\"322573\",\"r-deposit\":\"63000\",\"r-bkash\":\"\",\"r-banking\":\"328350\",\"r-cashpay\":\"\",\"r-rubel-bkash\":\"\",\"r-rubel-banking\":\"\",\"r-rubel-cash\":\"\",\"r-others\":\"\",\"r-expense\":\"\",\"current\":57223}","sohag_account":"{\"sohag-opening\":\"-6900\",\"sohag-deposit\":\"\",\"sohag-withdraw\":\"\",\"sohag-note1-label\":\"ওয়াইফাই বিল বাবদ\",\"sohag-note1-amount\":\"\",\"current\":-6900}","second_account":"{\"investment\":\"330000\",\"s-bkash1\":\"103444\",\"s-bkash2\":\"\",\"s-bkash3\":\"\",\"s-bkash4\":\"\",\"s-islami\":\"3500\",\"s-city\":\"250\",\"s-ific\":\"1000\",\"s-dbbl\":\"4200\",\"s-cash1\":\"\",\"s-cash2\":\"\",\"s-jaya-dhar\":\"-12000\",\"s-bhai-dhar\":\"-6900\",\"s-mb-minute-dhar\":\"-1300\",\"s-rafi-dhar\":\"-1500\",\"s-other-dhar1\":\"-112000\",\"s-other-dhar2\":\"5000\",\"s-other-dhar3\":\"-32000\",\"s-other-dhar4\":\"-91000\",\"s-extra-cash1\":\"23000\",\"s-extra-cash2\":\"\",\"s-other-dhar1-label\":\"ইমরান ধার\",\"s-other-dhar2-label\":\"কাউসার ধার\",\"s-other-dhar3-label\":\"মটর ক্রয়\",\"s-other-dhar4-label\":\"অন্যান্য ধার\",\"total\":135394}","draft_account":"{\"people\":[{\"id\":\"p1789138026113_1\",\"name\":\"রহিম\",\"cats\":{\"bkash\":[\"\",\"\",\"\",\"\",\"\"],\"banking\":[\"100000\",\"150100\",\"78250\"],\"cash\":[\"\"]}},{\"id\":\"p1789138026113_2\",\"name\":\"রুবেল\",\"cats\":{\"bkash\":[\"\",\"\"],\"banking\":[\"\"],\"cash\":[\"\"]}}]}"};var cur=__ls.getItem('seed_at')||'';if(SEED_AT>cur){for(var k in S){if(S[k]!==null&&S[k]!==undefined)__ls.setItem(k,S[k]);}__ls.setItem('seed_at',SEED_AT);}}catch(e){}</script>
 
 
@@ -584,16 +660,19 @@
 <div class="app-sub">দৈনিক লেনদেনের হিসাব</div>
 
 <div class="backup-bar">
-  <button type="button" onclick="downloadBackup()">⬇ ব্যাকআপ ডাউনলোড</button>
+  <button type="button" id="bk-save" class="bk-step bk-red" onclick="saveAllData()">১. 💾 সেভ</button>
+  <button type="button" id="bk-json" class="bk-step bk-red" onclick="downloadBackup()">২. ⬇ ব্যাকআপ ডাউনলোড</button>
+  <button type="button" id="bk-html" class="bk-step bk-red" onclick="saveWithData()">৩. ⬇ ডেটাসহ ফাইল ডাউনলোড</button>
+  <button type="button" id="bk-drive" class="bk-step bk-red" onclick="gdConnectClick()"><span id="gd-btn">৪. ☁ Google Drive সিঙ্ক</span></button>
+</div>
+<div class="backup-bar">
   <label class="backup-restore-label">⬆ ব্যাকআপ পুনরুদ্ধার
     <input type="file" accept="application/json" onchange="restoreBackup(event)">
   </label>
-  <button type="button" class="save-all-btn" onclick="saveAllData()">💾 সেভ</button>
-  <button type="button" class="save-all-btn" onclick="saveWithData()">⬇ ডেটাসহ ফাইল ডাউনলোড</button>
   <button type="button" onclick="hkOpen()">🛟 ব্যাকআপ ও রিকভারি</button>
-  <button type="button" class="save-all-btn" id="gd-btn" onclick="gdConnectClick()">☁ এখনই সিঙ্ক</button>
   <button type="button" id="gd-off" style="display: inline-flex;" onclick="gdDisconnect()">Drive বিচ্ছিন্ন</button>
 </div>
+<div class="hk-status" id="bk-note"></div>
 <div class="hk-status" id="hk-status"></div>
 <div class="hk-status" id="gd-status"></div>
 
@@ -608,7 +687,9 @@
 <div class="tab-panel active" id="tab-main">
 
   <!-- রহিম হিসাব -->
-  <div class="ledger" id="card-rahim">
+  <div id="card-rahim">
+   <div id="rahim-shot">
+    <div class="rbox rbox-1">
     <div class="ledger-head">
       <h2>রহিম হিসাব</h2>
       <span id="rahim-date"></span>
@@ -616,33 +697,50 @@
 
     <div class="row"><label>গতকালের সর্বশেষ ব্যালেন্স</label><span class="sign"></span><input type="number" id="r-total" placeholder="0"></div>
     <div class="row"><label>জমা</label><span class="sign">+</span><input type="number" id="r-deposit" placeholder="0"></div>
-
-    <div class="group-label">খরচ / প্রদান</div>
-    <div class="row"><label>রহিম বিকাশ</label><span class="sign">−</span><input type="number" id="r-bkash" placeholder="0"></div>
-    <div class="row"><label>রহিম ব্যাংকিং</label><span class="sign">−</span><input type="number" id="r-banking" placeholder="0"></div>
-    <div class="row"><label>ক্যাশ প্রদান</label><span class="sign">−</span><input type="number" id="r-cashpay" placeholder="0"></div>
-    <div class="row"><label>রুবেল বিকাশ</label><span class="sign">−</span><input type="number" id="r-rubel-bkash" placeholder="0"></div>
-    <div class="row"><label>রুবেল ব্যাংকিং</label><span class="sign">−</span><input type="number" id="r-rubel-banking" placeholder="0"></div>
-    <div class="row"><label>রুবেল ক্যাশ</label><span class="sign">−</span><input type="number" id="r-rubel-cash" placeholder="0"></div>
-    <div class="row"><label>অন্যান্য</label><span class="sign">−</span><input type="number" id="r-others" placeholder="0"></div>
-    <div class="row"><label>খরচ</label><span class="sign">−</span><input type="number" id="r-expense" placeholder="0"></div>
-
-    <div class="result-row">
-      <span class="rlabel">অবশিষ্ট বর্তমান ব্যালেন্স</span>
-      <span class="rvalue" id="r-current">৳ 57,223</span>
+    <div class="result-row" style="margin-top:6px;margin-bottom:6px;">
+      <span class="rlabel">ব্যালেন্স</span>
+      <span class="rvalue" id="r-subtotal">৳ 0</span>
     </div>
 
-    <div class="btn-row">
+    </div>
+
+    <div class="rbox rbox-2">
+    <div class="group-label">খরচ / প্রদান</div>
+    <div class="row r-exp-row" id="row-r-bkash"><label>রহিম বিকাশ</label><span class="sign">−</span><input type="number" id="r-bkash" placeholder="0"><button type="button" class="r-hide-btn" data-html2canvas-ignore="true" title="লুকান" onclick="rahimHide('r-bkash')"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg></button></div>
+    <div class="row r-exp-row" id="row-r-banking"><label>রহিম ব্যাংকিং</label><span class="sign">−</span><input type="number" id="r-banking" placeholder="0"><button type="button" class="r-hide-btn" data-html2canvas-ignore="true" title="লুকান" onclick="rahimHide('r-banking')"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg></button></div>
+    <div class="row r-exp-row" id="row-r-cashpay"><label>ক্যাশ প্রদান</label><span class="sign">−</span><input type="number" id="r-cashpay" placeholder="0"><button type="button" class="r-hide-btn" data-html2canvas-ignore="true" title="লুকান" onclick="rahimHide('r-cashpay')"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg></button></div>
+    <div class="row r-exp-row" id="row-r-rubel-bkash"><label>রুবেল বিকাশ</label><span class="sign">−</span><input type="number" id="r-rubel-bkash" placeholder="0"><button type="button" class="r-hide-btn" data-html2canvas-ignore="true" title="লুকান" onclick="rahimHide('r-rubel-bkash')"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg></button></div>
+    <div class="row r-exp-row" id="row-r-rubel-banking"><label>রুবেল ব্যাংকিং</label><span class="sign">−</span><input type="number" id="r-rubel-banking" placeholder="0"><button type="button" class="r-hide-btn" data-html2canvas-ignore="true" title="লুকান" onclick="rahimHide('r-rubel-banking')"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg></button></div>
+    <div class="row r-exp-row" id="row-r-rubel-cash"><label>রুবেল ক্যাশ</label><span class="sign">−</span><input type="number" id="r-rubel-cash" placeholder="0"><button type="button" class="r-hide-btn" data-html2canvas-ignore="true" title="লুকান" onclick="rahimHide('r-rubel-cash')"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg></button></div>
+    <div class="row r-exp-row" id="row-r-others"><label>অন্যান্য</label><span class="sign">−</span><input type="number" id="r-others" placeholder="0"><button type="button" class="r-hide-btn" data-html2canvas-ignore="true" title="লুকান" onclick="rahimHide('r-others')"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg></button></div>
+    <div class="row r-exp-row" id="row-r-expense"><label>খরচ</label><span class="sign">−</span><input type="number" id="r-expense" placeholder="0"><button type="button" class="r-hide-btn" data-html2canvas-ignore="true" title="লুকান" onclick="rahimHide('r-expense')"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg></button></div>
+
+    <div id="r-hidden-bar" data-html2canvas-ignore="true" style="display:none;"></div>
+
+    </div>
+
+    <div class="rbox rbox-3">
+    <div class="result-row">
+      <span class="rlabel">বর্তমান ব্যালেন্স</span>
+      <span class="rvalue" id="r-current">৳ 1,27,573</span>
+    </div>
+
+    </div>
+   </div>
+
+    <div class="btn-row" id="rahim-actions">
       <button class="ghost" onclick="clearRahim()">ক্লিয়ার</button>
       <button class="primary" onclick="submitRahim()">সাবমিট</button>
-      <button onclick="takeScreenshot('card-rahim','rahim-hisab')">স্ক্রিনশট</button>
+      <button onclick="takeScreenshot('rahim-shot','rahim-hisab')">স্ক্রিনশট</button>
     </div>
   </div>
 
 </div>
 
 <div class="tab-panel" id="tab-sohag">
-  <div class="ledger" id="card-sohag">
+  <div id="card-sohag">
+   <div id="sohag-shot">
+    <div class="rbox rb-s1">
     <div class="ledger-head">
       <h2>সোহাগ হিসাব</h2>
       <span id="sohag-date"></span>
@@ -652,18 +750,27 @@
     <div class="row"><label>জমা</label><span class="sign">+</span><input type="number" id="sohag-deposit" placeholder="0"></div>
     <div class="row"><label>উত্তোলন</label><span class="sign">−</span><input type="number" id="sohag-withdraw" placeholder="0" value="500" oninput="syncSohagNoteAmount()"></div>
 
+    </div>
+
+    <div class="rbox rb-s2">
     <div class="group-label">নোট (কি খাতে নিয়েছে)</div>
     <div class="row"><input type="text" class="dhar-label-input" id="sohag-note1-label" value="ওয়াইফাই বিল বাবদ" placeholder="কি খাতে নিয়েছে লিখুন" oninput="saveSohag()"><span class="sign"></span><input type="number" id="sohag-note1-amount" placeholder="0" value="500" readonly=""></div>
 
+    </div>
+
+    <div class="rbox rb-s3">
     <div class="result-row">
       <span class="rlabel">বর্তমান ব্যালেন্স</span>
       <span class="rvalue" id="sohag-current">৳ −6,900</span>
     </div>
 
-    <div class="btn-row">
+    </div>
+   </div>
+
+    <div class="btn-row" style="padding:0 12px;">
       <button class="ghost" onclick="clearSohag()">ক্লিয়ার</button>
       <button class="primary" onclick="submitSohag()">সাবমিট</button>
-      <button onclick="takeScreenshot('card-sohag','sohag-hisab')">স্ক্রিনশট</button>
+      <button onclick="takeScreenshot('sohag-shot','sohag-hisab')">স্ক্রিনশট</button>
     </div>
   </div>
 </div>
@@ -684,7 +791,7 @@
 
     <div class="final-card">
       <h3>সর্বমোট (সকল নাম)</h3>
-      <div class="final-amount" id="draft-grand-total">৳ 3,28,350</div>
+      <div class="final-amount" id="draft-grand-total">৳ 12,240</div>
     </div>
 
     <div class="note">
@@ -696,37 +803,47 @@
 <div class="tab-panel" id="tab-second">
 
   <!-- সকল হিসাব -->
-  <div class="ledger" id="card-second">
-    <div class="ledger-head">
+  <div id="card-second">
+   <div id="second-shot">
+    <div class="rbox rb-head"><div class="ledger-head">
       <h2>ব্যালেন্স হিসাব</h2>
       <span id="second-date"></span>
-    </div>
+    </div></div>
 
+    <div class="rbox rb-invest">
     <div class="group-label gl-invest">ইনভেষ্টমেন্ট (আলাদা হিসাব)</div>
     <div class="row"><label>ইমরান ইনভেষ্টমেন্ট</label><span class="sign">+</span><input type="number" id="investment" placeholder="0" oninput="calcSecond()"></div>
     <div class="subtotal-row category-total ct-invest"><span>মোট ইনভেষ্টমেন্ট</span><strong id="s-investment-total">৳ 3,30,000</strong></div>
+    </div>
 
+    <div class="rbox rb-bkash">
     <div class="group-label gl-bkash">বিকাশ</div>
     <div class="row"><label>বিকাশ ৩৪১</label><span class="sign"></span><input type="number" id="s-bkash1" placeholder="0" oninput="calcSecond()"></div>
     <div class="row"><label>বিকাশ ৬৪৮</label><span class="sign"></span><input type="number" id="s-bkash2" placeholder="0" oninput="calcSecond()"></div>
     <div class="row"><label>বিকাশ ৮১০</label><span class="sign"></span><input type="number" id="s-bkash3" placeholder="0" oninput="calcSecond()"></div>
     <div class="row"><label>বিকাশ ৬৪৭</label><span class="sign"></span><input type="number" id="s-bkash4" placeholder="0" oninput="calcSecond()"></div>
-    <div class="subtotal-row category-total ct-bkash"><span>মোট বিকাশ</span><strong id="s-bkash-total">৳ 1,03,444</strong></div>
+    <div class="subtotal-row category-total ct-bkash"><span>মোট বিকাশ</span><strong id="s-bkash-total">৳ 53,894</strong></div>
+    </div>
 
+    <div class="rbox rb-bank">
     <div class="group-label gl-bank">ব্যাংক</div>
     <div class="row"><label>ইসলামি ব্যাংক</label><span class="sign"></span><input type="number" id="s-islami" placeholder="0" oninput="calcSecond()"></div>
     <div class="row"><label>সিটি ব্যাংক</label><span class="sign"></span><input type="number" id="s-city" placeholder="0" oninput="calcSecond()"></div>
     <div class="row"><label>আইএফআইসি ব্যাংক</label><span class="sign"></span><input type="number" id="s-ific" placeholder="0" oninput="calcSecond()"></div>
     <div class="row"><label>ডাচ বাংলা ব্যাংক</label><span class="sign"></span><input type="number" id="s-dbbl" placeholder="0" oninput="calcSecond()"></div>
-    <div class="subtotal-row category-total ct-bank"><span>মোট ব্যাংক</span><strong id="s-bank-total">৳ 8,950</strong></div>
+    <div class="subtotal-row category-total ct-bank"><span>মোট ব্যাংক</span><strong id="s-bank-total">৳ 1,19,000</strong></div>
+    </div>
 
+    <div class="rbox rb-cash">
     <div class="group-label gl-cash">ক্যাশ</div>
     <div class="row"><label>মারুফ ক্যাশ</label><span class="sign"></span><input type="number" id="s-cash1" placeholder="0" oninput="calcSecond()"></div>
     <div class="row"><label>অন্যান্য ক্যাশ</label><span class="sign"></span><input type="number" id="s-cash2" placeholder="0" oninput="calcSecond()"></div>
     <div class="row"><label>এক্সট্রা ক্যাশ ১</label><span class="sign"></span><input type="number" id="s-extra-cash1" placeholder="0" oninput="calcSecond()"></div>
     <div class="row"><label>এক্সট্রা ক্যাশ ২</label><span class="sign"></span><input type="number" id="s-extra-cash2" placeholder="0" oninput="calcSecond()"></div>
-    <div class="subtotal-row category-total ct-cash"><span>মোট ক্যাশ (সব ক্যাশ)</span><strong id="s-cash-total">৳ 23,000</strong></div>
+    <div class="subtotal-row category-total ct-cash"><span>মোট ক্যাশ (সব ক্যাশ)</span><strong id="s-cash-total">৳ 28,000</strong></div>
+    </div>
 
+    <div class="rbox rb-dhar">
     <div class="group-label gl-dhar">ধার</div>
     <div class="row"><label>জয়া ধার</label><span class="sign">−</span><input type="number" id="s-jaya-dhar" placeholder="0" oninput="calcSecond()"></div>
     <div class="row"><label>সোহাগ ধার</label><span class="sign">−</span><input type="number" id="s-bhai-dhar" placeholder="0" oninput="calcSecond()"></div>
@@ -736,17 +853,21 @@
     <div class="row"><input type="text" class="dhar-label-input" id="s-other-dhar2-label" value="অন্যান্য ধার" placeholder="নাম লিখুন" oninput="saveSecond()"><span class="sign">−</span><input type="number" id="s-other-dhar2" placeholder="0" oninput="calcSecond()"></div>
     <div class="row"><input type="text" class="dhar-label-input" id="s-other-dhar3-label" value="অন্যান্য ধার" placeholder="নাম লিখুন" oninput="saveSecond()"><span class="sign">−</span><input type="number" id="s-other-dhar3" placeholder="0" oninput="calcSecond()"></div>
     <div class="row"><input type="text" class="dhar-label-input" id="s-other-dhar4-label" value="অন্যান্য ধার" placeholder="নাম লিখুন" oninput="saveSecond()"><span class="sign">−</span><input type="number" id="s-other-dhar4" placeholder="0" oninput="calcSecond()"></div>
-    <div class="subtotal-row category-total ct-dhar"><span>মোট ধার</span><strong id="s-dhar-total">৳ −2,51,700</strong></div>
+    <div class="subtotal-row category-total ct-dhar"><span>মোট ধার</span><strong id="s-dhar-total">৳ −2,56,700</strong></div>
+    </div>
 
 
+    <div class="rbox rb-total">
     <div class="result-row">
       <span class="rlabel">সকল খাতের মোট ব্যালেন্স</span>
-      <span class="rvalue" id="s-total">৳ 1,35,394</span>
+      <span class="rvalue" id="s-total">৳ 2,00,894</span>
     </div>
-    <div class="subtotal-row"><span>অবস্থা</span><span id="s-status" style="color: var(--bad);">দিবো</span></div>
+    <div class="subtotal-row"><span>অবস্থা</span><span id="s-status" style="color: var(--good);">পাবো</span></div>
+    </div>
+   </div>
 
-    <div class="btn-row">
-      <button onclick="takeScreenshot('card-second','sokol-hisab')">স্ক্রিনশট</button>
+    <div class="btn-row" style="padding:0 12px;">
+      <button onclick="takeScreenshot('second-shot','sokol-hisab')">স্ক্রিনশট</button>
     </div>
   </div>
 
@@ -761,19 +882,27 @@
 <div class="tab-panel" id="tab-final">
   <div class="draft-wrap">
     <div class="final-card final-calculation-card" id="card-final">
+     <div id="final-shot">
       <h3>চূড়ান্ত হিসাব</h3>
       <div class="calc-lines">
-        <div class="calc-line"><span>রহিম ব্যালেন্স</span><strong id="f-rahim">৳ 57,223</strong></div>
+       <div class="fbox fb-1">
+        <div class="calc-line"><span>রহিম ব্যালেন্স</span><strong id="f-rahim">৳ 1,27,573</strong></div>
         <div class="calc-line"><span>+ ইমরান ইনভেষ্টমেন্ট</span><strong id="f-investment">৳ 3,30,000</strong></div>
-        <div class="calc-line calc-line-total"><span>মোট ব্যালেন্স</span><strong id="f-combined">৳ 3,87,223</strong></div>
-        <div class="calc-line"><span>+ মোট ধার</span><strong id="f-dhar">৳ −2,51,700</strong></div>
-        <div class="calc-line calc-line-total"><span>অবশিষ্ট ব্যালেন্স</span><strong id="f-remaining">৳ 1,35,523</strong></div>
-        <div class="calc-line"><span>সকল খাতের ব্যালেন্স (যোগফল)</span><strong id="f-all-accounts">৳ 1,35,394</strong></div>
-        <div class="calc-line calc-line-result"><span id="f-label">দিবো</span><strong id="f-amount" style="color: var(--bad);">- ৳ 129</strong></div>
+        <div class="calc-line calc-line-total"><span>মোট ব্যালেন্স</span><strong id="f-combined">৳ 4,57,573</strong></div>
+       </div>
+       <div class="fbox fb-2">
+        <div class="calc-line"><span>+ মোট ধার</span><strong id="f-dhar">৳ −2,56,700</strong></div>
+        <div class="calc-line calc-line-total"><span>অবশিষ্ট ব্যালেন্স</span><strong id="f-remaining">৳ 2,00,873</strong></div>
+       </div>
+       <div class="fbox fb-3">
+        <div class="calc-line"><span>সকল খাতের ব্যালেন্স (যোগফল)</span><strong id="f-all-accounts">৳ 2,00,894</strong></div>
+        <div class="calc-line calc-line-result"><span id="f-label">পাবো</span><strong id="f-amount" style="color: var(--good);">+ ৳ 21</strong></div>
+       </div>
       </div>
-      <span class="final-tag tag-bad" id="f-tag">দিবো</span>
+      <span class="final-tag tag-good" id="f-tag">পাবো</span>
+     </div>
       <div class="btn-row" style="justify-content:center;">
-        <button onclick="takeScreenshot('card-final','mul-hisab')">স্ক্রিনশট</button>
+        <button onclick="takeScreenshot('final-shot','mul-hisab')">স্ক্রিনশট</button>
       </div>
     </div>
 
@@ -828,8 +957,11 @@ function showToast(msg){
   t.classList.add('show');
   setTimeout(()=>t.classList.remove('show'), 1600);
 }
+/* দিন বদল হয় রাত ২টায়: রাত ১২টা–২টা পর্যন্ত আগের দিনের হিসাব */
+const DAY_START_HOUR = 2;
+function hisabNow(){ return new Date(Date.now() - DAY_START_HOUR*3600*1000); }
 function setDates(){
-  const parts = new Intl.DateTimeFormat('bn-BD', {day:'numeric', month:'long', year:'numeric'}).formatToParts(new Date());
+  const parts = new Intl.DateTimeFormat('bn-BD', {day:'numeric', month:'long', year:'numeric'}).formatToParts(hisabNow());
   let dayStr = '', monthStr = '', yearStr = '';
   parts.forEach(p=>{
     if(p.type === 'day') dayStr = p.value;
@@ -862,12 +994,45 @@ let rahimCurrent = 0;
 let secondTotal = 0;
 let isLoading = true;
 
+let rahimHidden = [];
+const RAHIM_EXP_IDS = ['r-bkash','r-banking','r-cashpay','r-rubel-bkash','r-rubel-banking','r-rubel-cash','r-others','r-expense'];
+function rahimRenderHidden(){
+  // টাকা থাকা ঘর কখনো লুকানো থাকবে না
+  rahimHidden = rahimHidden.filter(id => RAHIM_EXP_IDS.indexOf(id) > -1 && num(id) === 0);
+  RAHIM_EXP_IDS.forEach(id=>{
+    const row = document.getElementById('row-'+id);
+    if(row) row.classList.toggle('r-hidden', rahimHidden.indexOf(id) > -1);
+  });
+  const bar = document.getElementById('r-hidden-bar');
+  if(!bar) return;
+  if(!rahimHidden.length){ bar.style.display='none'; bar.innerHTML=''; return; }
+  bar.style.display='block';
+  bar.innerHTML = '<div class="hb-title">লুকানো ঘর (ট্যাপ করলে দেখাবে):</div>' +
+    rahimHidden.map(id=>{
+      const lab = document.querySelector('#row-'+id+' label').textContent;
+      return '<button type="button" class="hb-chip" onclick="rahimUnhide(\''+id+'\')">+ '+lab+'</button>';
+    }).join('');
+}
+function rahimHide(id){
+  if(num(id) !== 0){ showToast('এই ঘরে টাকা আছে, আগে ০ করুন'); return; }
+  if(rahimHidden.indexOf(id) < 0) rahimHidden.push(id);
+  rahimRenderHidden();
+  saveRahim();
+}
+function rahimUnhide(id){
+  rahimHidden = rahimHidden.filter(x => x !== id);
+  rahimRenderHidden();
+  saveRahim();
+}
 function computeRahimCurrent(){
   const total = num('r-total');
   const deposit = num('r-deposit');
   const deductions = num('r-bkash') + num('r-banking') + num('r-cashpay') +
                      num('r-rubel-bkash') + num('r-rubel-banking') + num('r-rubel-cash') + num('r-others') + num('r-expense');
   // রহিমের হিসাব সম্পূর্ণ আলাদা: ইনভেষ্টমেন্ট বা অন্য খাত এখানে ধরা হবে না
+  rahimRenderHidden();
+  const st = document.getElementById('r-subtotal');
+  if(st) st.textContent = fmt(total + deposit);
   return total + deposit - deductions;
 }
 
@@ -1072,6 +1237,7 @@ async function saveAllData(){
 
   hkSnapshotNow('ম্যানুয়াল সেভ', {force:true});
   await hkMirrorNow();
+  bkMark('save');
   showToast('সব ডেটা সেভ হয়েছে • স্ন্যাপশট ও মিরর কপি হালনাগাদ');
 }
 
@@ -1089,6 +1255,7 @@ function downloadBackup(){
   document.body.removeChild(a);
   URL.revokeObjectURL(url);
   hkMarkFile();
+  bkMark('json');
   showToast('ব্যাকআপ ফাইল ডাউনলোড হয়েছে');
 }
 
@@ -1123,6 +1290,7 @@ async function saveRahim(){
   const data = {};
   RAHIM_FIELDS.forEach(id => data[id] = document.getElementById(id).value);
   data.current = rahimCurrent;
+  data.hidden = rahimHidden;
 
   const value = JSON.stringify(data);
 
@@ -1177,6 +1345,7 @@ async function saveSecond(){
 
 function loadRahimFromData(data){
   if(!data) return;
+  rahimHidden = Array.isArray(data.hidden) ? data.hidden.slice() : [];
   RAHIM_FIELDS.forEach(id => {
     if(data[id] !== undefined) document.getElementById(id).value = data[id];
   });
@@ -1197,7 +1366,7 @@ function loadSecondFromData(data){
 }
 
 function todayKey(){
-  return new Date().toDateString();
+  return hisabNow().toDateString();
 }
 
 function applyDailyRollover(){
@@ -1459,7 +1628,7 @@ function renderDraft(){
 
     DRAFT_CATS.forEach(catDef=>{
       const block = document.createElement('div');
-      block.className = 'cat-block';
+      block.className = 'cat-block cb-'+catDef.key;
 
       const title = document.createElement('div');
       title.className = 'cat-title';
@@ -1903,6 +2072,7 @@ async function hkAutoRecover(){
 
 /* ---- পরিবর্তন ধরা ও সময়মতো ব্যাকআপ ---- */
 function hkOnChange(){
+  try{bkRefresh();}catch(e){}
   if(!hkReady) return;
   try{__ls.setItem('hk_saved_at',new Date().toISOString());}catch(e){}
   clearTimeout(hkT1); hkT1=setTimeout(hkMirrorNow,1500);
@@ -1959,6 +2129,26 @@ function restoreBackup(event){
     input.value='';
   };
   reader.readAsText(file);
+}
+
+
+/* ---------- ব্যাকআপ ধাপের লাল/সবুজ অবস্থা ---------- */
+const BK_STEPS=['save','json','html','drive'];
+function bkGet(){try{return JSON.parse(__ls.getItem('bk_done')||'{}')||{};}catch(e){return {};}}
+function bkMark(step){
+  try{var d=bkGet();d[step]=hkSig(hkCollect());__ls.setItem('bk_done',JSON.stringify(d));}catch(e){}
+  bkRefresh();
+}
+function bkRefresh(){
+  var d=bkGet(), cur=hkSig(hkCollect()), all=true;
+  BK_STEPS.forEach(function(st){
+    var el=document.getElementById('bk-'+st); if(!el) return;
+    var ok=(d[st]===cur);
+    el.classList.toggle('bk-green',ok); el.classList.toggle('bk-red',!ok);
+    if(!ok) all=false;
+  });
+  var n=document.getElementById('bk-note');
+  if(n) n.innerHTML = all ? '<span class="bk-ok">✅ সব ডাটা নিরাপদে আছে</span>' : '<span class="hk-warn">⚠ লাল বাটনগুলো ১ থেকে ৪ সিরিয়ালে চাপুন — সব সবুজ হলে ডাটা নিরাপদ</span>';
 }
 
 /* ---- ইউআই ---- */
@@ -2028,7 +2218,7 @@ function gdSetStatus(msg, bad){
   const el = document.getElementById('gd-status');
   if(el) el.innerHTML = msg ? '☁ Drive: <b class="'+(bad?'hk-warn':'')+'">'+msg+'</b>' : '';
   const off = document.getElementById('gd-off'); if(off) off.style.display = gdConnected() ? 'inline-flex' : 'none';
-  const b = document.getElementById('gd-btn'); if(b) b.textContent = gdConnected() ? '☁ এখনই সিঙ্ক' : '☁ Google Drive সিঙ্ক';
+  const b = document.getElementById('gd-btn'); if(b) b.textContent = gdConnected() ? '৪. ☁ এখনই সিঙ্ক' : '৪. ☁ Google Drive সিঙ্ক';
 }
 function gdInit(){
   if(gdClient) return true;
@@ -2127,7 +2317,7 @@ async function gdSync(manual){
     }
     if(act === 'pull'){ gdApplyRemote(remote); return; }
     if(act === 'push') await gdUpload(gdPayload(local));
-    if(act !== 'none') __ls.setItem('gd_sig', sig);
+    if(act !== 'none'){ __ls.setItem('gd_sig', sig); bkMark('drive'); }
     gdSetStatus('সিঙ্ক সম্পন্ন • '+hkFmtTime(new Date().toISOString()));
     if(manual) showToast('Google Drive-এ সিঙ্ক সম্পন্ন');
   }catch(e){
@@ -2229,6 +2419,7 @@ async function saveWithData(){
     document.body.appendChild(a);a.click();document.body.removeChild(a);
     setTimeout(function(){URL.revokeObjectURL(url)},2000);
     hkMarkFile();
+    bkMark('save'); bkMark('html');
     showToast('ডেটাসহ নতুন ফাইল ডাউনলোড হয়েছে');
   }catch(e){console.error(e);showToast('ফাইল তৈরি করা যায়নি');}
 }
@@ -2236,4 +2427,96 @@ async function saveWithData(){
 
 
 
+<script>
+(function(){
+  var cv=document.getElementById('bg-anim'); if(!cv||!cv.getContext) return;
+  var ctx=cv.getContext('2d'), W=0, H=0, dpr=1;
+  var COLORS=['#2E5A8C','#8C3E5A','#B98F3E','#1F4B3F','#6B46C1','#D6136E','#1D6FA5','#2E7D5B','#B85C1E'];
+  var squares=[], bubbles=[], parts=[], rings=[], last=0, T=0;
+  function rnd(a,b){return a+Math.random()*(b-a);}
+  function pick(){return COLORS[Math.floor(Math.random()*COLORS.length)];}
+  function clamp(v,a,b){return v<a?a:(v>b?b:v);}
+  function newSquare(init){
+    var sz=rnd(18,46);
+    return {x:rnd(0,W), y:init?rnd(-40,H):-sz*2-rnd(0,H*0.3), size:sz, vy:rnd(25,70), rot:rnd(0,6.28), vr:rnd(-0.6,0.6), c:pick(), flash:0};
+  }
+  function newBubble(init){
+    var r=rnd(7,20);
+    return {bx:rnd(0,W), x:0, y:init?rnd(0,H):H+r+rnd(0,H*0.3), r:r, vy:rnd(40,100), ph:rnd(0,6.28), f:rnd(0.8,1.8), amp:rnd(6,18), c:pick()};
+  }
+  function init(){
+    squares=[]; bubbles=[]; parts=[]; rings=[];
+    var ns=Math.round(clamp(W*H/30000,10,26)), nb=Math.round(clamp(W*H/45000,8,18));
+    for(var i=0;i<ns;i++) squares.push(newSquare(true));
+    for(var j=0;j<nb;j++) bubbles.push(newBubble(true));
+  }
+  function resize(){
+    dpr=Math.min(window.devicePixelRatio||1,2);
+    W=window.innerWidth; H=window.innerHeight;
+    cv.width=Math.round(W*dpr); cv.height=Math.round(H*dpr);
+    ctx.setTransform(dpr,0,0,dpr,0,0);
+    init();
+  }
+  function burst(b){
+    for(var i=0;i<16;i++){
+      var a=rnd(0,6.283), sp=rnd(60,200);
+      parts.push({x:b.x,y:b.y,vx:Math.cos(a)*sp,vy:Math.sin(a)*sp,life:rnd(0.4,0.85),max:0,sz:rnd(1.5,3.6),c:b.c});
+      parts[parts.length-1].max=parts[parts.length-1].life;
+    }
+    rings.push({x:b.x,y:b.y,r:b.r,mr:b.r*2.6,life:0.35,max:0.35,c:b.c});
+  }
+  function hits(b,s){
+    var dx=b.x-s.x, dy=b.y-s.y, lim=s.size*0.75+b.r;
+    if(dx*dx+dy*dy>lim*lim) return false;
+    var co=Math.cos(s.rot), si=Math.sin(s.rot);
+    var lx=dx*co+dy*si, ly=-dx*si+dy*co, h=s.size/2;
+    var cx=clamp(lx,-h,h), cy=clamp(ly,-h,h), ex=lx-cx, ey=ly-cy;
+    return ex*ex+ey*ey<b.r*b.r;
+  }
+  function frame(ts){
+    var dt=last?Math.min((ts-last)/1000,0.05):0; last=ts; T+=dt;
+    ctx.clearRect(0,0,W,H);
+    var i,j,s,b,p,g;
+    for(i=0;i<squares.length;i++){
+      s=squares[i]; s.y+=s.vy*dt; s.rot+=s.vr*dt; if(s.flash>0) s.flash=Math.max(0,s.flash-dt*3);
+      if(s.y-s.size>H) squares[i]=s=newSquare(false);
+      ctx.save(); ctx.translate(s.x,s.y); ctx.rotate(s.rot);
+      ctx.globalAlpha=0.16+s.flash*0.35; ctx.fillStyle=s.c; ctx.fillRect(-s.size/2,-s.size/2,s.size,s.size);
+      ctx.globalAlpha=0.45+s.flash*0.4; ctx.lineWidth=1.5; ctx.strokeStyle=s.c; ctx.strokeRect(-s.size/2,-s.size/2,s.size,s.size);
+      ctx.restore();
+    }
+    for(i=0;i<bubbles.length;i++){
+      b=bubbles[i]; b.y-=b.vy*dt; b.x=b.bx+Math.sin(T*b.f+b.ph)*b.amp;
+      if(b.y+b.r<0){ bubbles[i]=newBubble(false); continue; }
+      var dead=false;
+      for(j=0;j<squares.length;j++){
+        if(hits(b,squares[j])){ squares[j].flash=1; burst(b); bubbles[i]=newBubble(false); dead=true; break; }
+      }
+      if(dead) continue;
+      g=ctx.createRadialGradient(b.x-b.r*0.35,b.y-b.r*0.35,b.r*0.1,b.x,b.y,b.r);
+      g.addColorStop(0,'#ffffff'); g.addColorStop(0.25,b.c); g.addColorStop(1,b.c);
+      ctx.globalAlpha=0.6; ctx.fillStyle=g; ctx.beginPath(); ctx.arc(b.x,b.y,b.r,0,6.283); ctx.fill();
+      ctx.globalAlpha=0.85; ctx.lineWidth=1.2; ctx.strokeStyle=b.c; ctx.stroke();
+    }
+    for(i=rings.length-1;i>=0;i--){
+      p=rings[i]; p.life-=dt; if(p.life<=0){rings.splice(i,1);continue;}
+      var k=1-p.life/p.max;
+      ctx.globalAlpha=(1-k)*0.8; ctx.lineWidth=2; ctx.strokeStyle=p.c;
+      ctx.beginPath(); ctx.arc(p.x,p.y,p.r+(p.mr-p.r)*k,0,6.283); ctx.stroke();
+    }
+    for(i=parts.length-1;i>=0;i--){
+      p=parts[i]; p.life-=dt; if(p.life<=0){parts.splice(i,1);continue;}
+      p.x+=p.vx*dt; p.y+=p.vy*dt; p.vx*=0.95; p.vy*=0.95;
+      ctx.globalAlpha=p.life/p.max; ctx.fillStyle=p.c;
+      ctx.beginPath(); ctx.arc(p.x,p.y,p.sz,0,6.283); ctx.fill();
+    }
+    ctx.globalAlpha=1;
+    requestAnimationFrame(frame);
+  }
+  document.addEventListener('visibilitychange',function(){ last=0; });
+  window.addEventListener('resize',resize);
+  resize();
+  requestAnimationFrame(frame);
+})();
+</script>
 </body></html>
