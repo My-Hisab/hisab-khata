@@ -662,7 +662,7 @@
 <div class="backup-bar">
   <button type="button" id="bk-save" class="bk-step bk-red" onclick="saveAllData()">১. 💾 সেভ</button>
   <button type="button" id="bk-json" class="bk-step bk-red" onclick="downloadBackup()">২. ⬇ ব্যাকআপ ডাউনলোড</button>
-  <button type="button" id="bk-html" class="bk-step bk-red" onclick="saveWithData()">৩. ⬇ ডেটাসহ ফাইল ডাউনলোড</button>
+  <button type="button" id="bk-html" onclick="saveWithData()">৩. ⬇ ডেটাসহ ফাইল ডাউনলোড</button>
   <button type="button" id="bk-drive" class="bk-step bk-red" onclick="gdConnectClick()"><span id="gd-btn">৪. ☁ Google Drive সিঙ্ক</span></button>
 </div>
 <div class="backup-bar">
@@ -2133,7 +2133,7 @@ function restoreBackup(event){
 
 
 /* ---------- ব্যাকআপ ধাপের লাল/সবুজ অবস্থা ---------- */
-const BK_STEPS=['save','json','html','drive'];
+const BK_STEPS=['save','json','drive'];
 function bkGet(){try{return JSON.parse(__ls.getItem('bk_done')||'{}')||{};}catch(e){return {};}}
 function bkMark(step){
   try{var d=bkGet();d[step]=hkSig(hkCollect());__ls.setItem('bk_done',JSON.stringify(d));}catch(e){}
@@ -2148,7 +2148,7 @@ function bkRefresh(){
     if(!ok) all=false;
   });
   var n=document.getElementById('bk-note');
-  if(n) n.innerHTML = all ? '<span class="bk-ok">✅ সব ডাটা নিরাপদে আছে</span>' : '<span class="hk-warn">⚠ লাল বাটনগুলো ১ থেকে ৪ সিরিয়ালে চাপুন — সব সবুজ হলে ডাটা নিরাপদ</span>';
+  if(n) n.innerHTML = all ? '<span class="bk-ok">✅ সব ডাটা নিরাপদে আছে</span>' : '<span class="hk-warn">⚠ লাল বাটনগুলো ১, ২ ও ৪ সিরিয়ালে চাপুন — সব সবুজ হলে ডাটা নিরাপদ</span>';
 }
 
 /* ---- ইউআই ---- */
