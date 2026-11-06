@@ -1001,6 +1001,7 @@ function switchTab(tab){
   document.getElementById('tab-btn-draft').classList.toggle('active', tab==='draft');
   document.getElementById('tab-btn-second').classList.toggle('active', tab==='second');
   document.getElementById('tab-btn-final').classList.toggle('active', tab==='final');
+  try{ sessionStorage.setItem('lastTab', tab); }catch(e){}
 }
 
 let rahimCurrent = 0;
@@ -2350,7 +2351,8 @@ async function gdSync(manual){
 function gdArm(){
   if(gdArmed) return;
   gdArmed = true;
-  const h = function(){
+  const h = function(ev){
+    try{ if(ev && ev.target && ev.target.closest && ev.target.closest('.tab-btn')) return; }catch(e){}
     gdArmed = false;
     document.removeEventListener('pointerup', h, true);
     document.removeEventListener('keydown', h, true);
@@ -2385,7 +2387,7 @@ function gdDisconnect(){
   gdSetStatus('সংযুক্ত নয়');
 }
 function gdBoot(){
-  if(gdConnected()){ gdSetStatus('সংযুক্ত — স্ক্রিনে প্রথম ট্যাপে সিঙ্ক হবে'); gdArm(); }
+  if(gdConnected()){ gdSetStatus('সংযুক্ত — সিঙ্ক করতে "এখনই সিঙ্ক" চাপুন'); }
   else gdSetStatus('সংযুক্ত নয়');
 }
 
@@ -2393,6 +2395,7 @@ function gdBoot(){
 (async function hkInit(){
   await hkAutoRecover();
   setDates();
+  try{ var _lt = sessionStorage.getItem('lastTab'); if(_lt) switchTab(_lt); }catch(e){}
   await loadAll();
   await loadDraft();
   hkReady=true;
